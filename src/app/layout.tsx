@@ -16,9 +16,15 @@ const faustina = Faustina({
   variable: "--font-heading",
 });
 
+
 export const metadata: Metadata = {
   title: "Jamie Packer",
   description: "Jamie's personal website",
+  icons: {
+    icon: "/icon.svg",
+    shortcut: "/favicon.png",
+    apple: "/favicon.png",
+  },
 };
 
 export default function RootLayout({

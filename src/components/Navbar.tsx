@@ -8,21 +8,21 @@ const Navbar = () => {
           <div className="flex items-center space-x-8 md:space-x-2 font-heading">
             <Link 
               href="/articles" 
-              className="text-gray-300 rounded-md px-10 py-3 text-base font-medium transition-colors duration-200 hover:bg-accent/25 hover:text-white"
+              className="text-foreground2 rounded-md px-10 py-3 text-base font-medium transition-colors duration-200 hover:bg-accent/25 hover:text-white"
             >
               Articles
             </Link>
 
             <Link 
               href="/" 
-              className="text-white text-2xl rounded-md px-16 py-3 transition-colors duration-200 hover:bg-accent/35"
+              className="text-foreground text-2xl rounded-md px-16 py-3 transition-colors duration-200 hover:bg-accent/35"
             >
               Jamie Packer
             </Link>
 
             <Link 
               href="/projects" 
-              className="text-gray-300 rounded-md px-10 py-3 text-base font-medium transition-colors duration-200 hover:bg-accent/25 hover:text-white"
+              className="text-foreground2 rounded-md px-10 py-3 text-base font-medium transition-colors duration-200 hover:bg-accent/25 hover:text-white"
             >
               Projects
             </Link>

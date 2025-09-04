@@ -13,7 +13,7 @@ const HomePage = () => {
 
       {/* Hero Section */}
       <section id="hero" className="grid grid-cols-1 md:grid-cols-2 min-h-screen">
-        <div className="bg-gray-600 hidden md:block">
+        <div className="bg-background hidden md:block">
           <div
             className="h-full w-full bg-cover bg-center"
             style={{ backgroundImage: "url('/placeholder_img.svg')" }}
@@ -30,7 +30,7 @@ const HomePage = () => {
           </p>
           <a
             href="#about"
-            className="mt-8 inline-block bg-accent text-white font-bold py-3 px-6 rounded-md transition duration-200 hover:brightness-150"
+            className="mt-8 inline-block bg-accent text-foreground font-bold py-3 px-6 rounded-md transition duration-200 hover:brightness-150"
           >
             Learn More ↓
           </a>
@@ -43,7 +43,7 @@ const HomePage = () => {
         {/* 'Back to Top' Button */}
         <a 
           href="#" 
-          className="absolute top-16 left-1/2 -translate-x-1/2 bg-accent text-white rounded-full w-14 h-14 flex items-center justify-center text-2xl font-bold transition duration-200 hover:brightness-70"
+          className="absolute top-16 left-1/2 -translate-x-1/2 bg-accent text-foreground rounded-full w-14 h-14 flex items-center justify-center text-2xl font-bold transition duration-200 hover:brightness-70"
           aria-label="Back to top"
         >
           ↑
@@ -53,17 +53,17 @@ const HomePage = () => {
           <div className="flex flex-col md:flex-row items-center md:space-x-12">
             <div className="md:w-1-2 mb-8 md:mb-0">
               <h2 className="font-heading text-3xl font-bold mb-6">About Me</h2>
-              <p className="text-gray-400 mb-8">
+              <p className="text-foreground2 mb-8">
                 I'm passionate about leveraging data to solve real problems and create meaningful insights. My skills in Python, machine learning, and data visualization are the foundation of my work. This website serves as a portfolio to showcase my projects and share my findings. :)
               </p>
               <div className="flex space-x-8">
-                <a href="mailto:contact@jamiepacker.com" className="text-gray-400 hover:text-accent transition-colors duration-200" aria-label="Email Me">
+                <a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ" target="_blank" rel="noopener noreferrer" className="text-foreground hover:text-accent transition-colors duration-200" aria-label="Email Me">
                   <EmailIcon className="w-8 h-8" />
                 </a>
-                <a href="https://www.linkedin.com/in/jamie-packer-622101238/" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-accent transition-colors duration-200" aria-label="LinkedIn Profile">
+                <a href="https://www.linkedin.com/in/jamie-packer-622101238/" target="_blank" rel="noopener noreferrer" className="text-foreground hover:text-accent transition-colors duration-200" aria-label="LinkedIn Profile">
                   <LinkedInIcon className="w-8 h-8" />
                 </a>
-                <a href="https://github.com/Jamie-Packer" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-accent transition-colors duration-200" aria-label="GitHub Profile">
+                <a href="https://github.com/Jamie-Packer" target="_blank" rel="noopener noreferrer" className="text-foreground hover:text-accent transition-colors duration-200" aria-label="GitHub Profile">
                   <GitHubIcon className="w-8 h-8" />
                 </a>
               </div>
