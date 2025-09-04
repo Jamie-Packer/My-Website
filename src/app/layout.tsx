@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Nunito_Sans, Faustina } from "next/font/google";
 import "./globals.css";
+import { Analytics } from "@vercel/analytics/next"
 
 
 const nunitoSans = Nunito_Sans({
@@ -38,6 +39,7 @@ export default function RootLayout({
         className={`${nunitoSans.variable} ${faustina.variable} antialiased`}
       >
         {children}
+        <Analytics />
       </body>
     </html>
   );

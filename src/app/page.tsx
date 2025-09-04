@@ -73,19 +73,19 @@ const HomePage = () => {
                 href="/placeholder_cv.pdf"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="bg-accent hover:brightness-150 text-white font-bold py-3 px-6 rounded-md transition-colors duration-200 text-center flex-1"
+                className="bg-accent hover:brightness-150 text-foreground font-bold py-3 px-6 rounded-md transition-colors duration-200 text-center flex-1"
               >
                 View CV
               </a>
               <Link
                 href="/projects"
-                className="bg-background hover:brightness-130 text-white font-bold py-3 px-6 rounded-md transition-colors duration-200 text-center flex-1"
+                className="bg-background hover:brightness-130 text-foreground font-bold py-3 px-6 rounded-md transition-colors duration-200 text-center flex-1"
               >
                 My Projects
               </Link>
               <Link
                 href="/articles"
-                className="bg-background hover:brightness-130 text-white font-bold py-3 px-6 rounded-md transition-colors duration-200 text-center flex-1"
+                className="bg-background hover:brightness-130 text-foreground font-bold py-3 px-6 rounded-md transition-colors duration-200 text-center flex-1"
               >
                 My Articles
               </Link>
