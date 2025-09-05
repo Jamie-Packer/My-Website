@@ -33,7 +33,7 @@ const ArticleSummary = ({ title, date, description, slug, tags }: ArticleSummary
           {tags.map((tag) => (
             <span 
               key={tag} 
-              className="bg-accent/10 border border-accent/30 text-accent text-xs font-semibold px-2.5 py-1 rounded-md"
+              className="bg-accent/10 border border-accent/30 text-foreground2 text-xs font-semibold px-2.5 py-1 rounded-md"
             >
               {tag}
             </span>
