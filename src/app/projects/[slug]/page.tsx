@@ -15,14 +15,7 @@ export async function generateStaticParams() {
   }));
 }
 
-interface ProjectPageProps {
-  params: {
-    slug: string;
-  };
-}
-
-export default async function ProjectPage({ params }: ProjectPageProps) {
-  // vvv THIS IS THE CORRECT FIX FROM THE DOCUMENTATION vvv
+export default async function ProjectPage({ params }: { params: { slug: string } }) {
   const { slug } = await params;
 
   const { metadata, content } = await getContentBySlug('projects', slug);
