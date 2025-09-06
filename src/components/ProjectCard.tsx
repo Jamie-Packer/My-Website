@@ -34,7 +34,7 @@ const ProjectCard = ({ slug, title, description, imageUrl, tags, liveUrl, repoUr
           <p className="text-foreground2 mb-4 text-sm">{description}</p>
           <div className="flex flex-wrap gap-2">
             {tags.map((tag) => (
-              <span key={tag} className="bg-accent/10 border border-accent/30 text-accent text-xs font-semibold px-2.5 py-1 rounded-md">
+              <span key={tag} className="bg-accent/10 border border-accent/30 text-foreground2 text-xs font-semibold px-2.5 py-1 rounded-md">
                 {tag}
               </span>
             ))}

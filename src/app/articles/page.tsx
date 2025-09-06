@@ -3,13 +3,11 @@
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import ArticleSummary from '@/components/ArticleSummary';
-// Make sure to import the specific type here
 import { getSortedContentData, ArticleMetadata } from '@/lib/content';
 
-const ArticlesPage = () => {
-  // Add <ArticleMetadata> to tell the function what type to return
-  const articles = getSortedContentData<ArticleMetadata>('articles');
-
+const ArticlesPage = async () => {
+  const articles = await getSortedContentData<ArticleMetadata>('articles');
+  
   return (
     <main>
       <Navbar />
@@ -21,7 +19,7 @@ const ArticlesPage = () => {
             <ArticleSummary
               key={article.slug}
               title={article.title}
-              date={article.date} // This will now be valid
+              date={article.date}
               description={article.description}
               slug={article.slug}
               tags={article.tags} 

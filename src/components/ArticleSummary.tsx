@@ -12,12 +12,14 @@ interface ArticleSummaryProps {
 
 const ArticleSummary = ({ title, date, description, slug, tags }: ArticleSummaryProps) => {
   return (
-    <article className="border border-foreground/10 bg-background2 p-6 rounded-lg shadow-md mb-8 transition-transform duration-300 hover:scale-[1.02]">
+    // The hover effect classes have been updated to match the ProjectCard
+    <Link 
+      href={`/articles/${slug}`}
+      className="group block cursor-pointer border border-foreground/10 bg-background2 p-6 rounded-lg shadow-md mb-8 transition-shadow duration-300 hover:shadow-lg hover:shadow-accent/20"
+    >
       <div className="flex justify-between items-baseline mb-2">
-        <h2 className="font-heading text-2xl font-bold">
-          <Link href={`/articles/${slug}`} className="hover:text-accent transition-colors duration-200">
-            {title}
-          </Link>
+        <h2 className="font-heading text-2xl font-bold transition-colors duration-200 group-hover:text-accent">
+          {title}
         </h2>
         <p className="text-sm text-foreground2">{date}</p>
       </div>
@@ -26,9 +28,9 @@ const ArticleSummary = ({ title, date, description, slug, tags }: ArticleSummary
       </p>
 
       <div className="mt-4 flex justify-between items-center">
-        <Link href={`/articles/${slug}`} className="font-bold text-accent transition duration-200 hover:brightness-150">
+        <span className="font-bold text-accent transition duration-200 group-hover:brightness-150">
           Read More →
-        </Link>
+        </span>
         <div className="flex flex-wrap gap-2">
           {tags.map((tag) => (
             <span 
@@ -40,7 +42,7 @@ const ArticleSummary = ({ title, date, description, slug, tags }: ArticleSummary
           ))}
         </div>
       </div>
-    </article>
+    </Link>
   );
 };
 

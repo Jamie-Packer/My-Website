@@ -5,10 +5,11 @@ import Footer from "@/components/Footer";
 import ProjectCard from "@/components/ProjectCard";
 import { getSortedContentData, ProjectMetadata } from "@/lib/content";
 
-export default function ProjectsPage() {
-  // 1. Fetch the data for ALL projects
-  const projects = getSortedContentData<ProjectMetadata>('projects');
-
+// vvv FIX: Make the component async
+export default async function ProjectsPage() {
+  // vvv FIX: Await the result of the function call
+  const projects = await getSortedContentData<ProjectMetadata>('projects');
+  
   return (
     <main>
       <Navbar />
@@ -17,8 +18,7 @@ export default function ProjectsPage() {
         <p className="text-foreground2 text-lg mb-12">
           A collection of projects showcasing my skills in data science and web development.
         </p>
-
-        {/* 2. Map over the project data and render a card for each one */}
+        
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           {projects.map((project) => (
             <ProjectCard key={project.slug} {...project} />

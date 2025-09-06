@@ -1,11 +1,11 @@
 // src/lib/content.ts
 
-import fs from 'fs';
+import fs from 'fs/promises';
 import path from 'path';
 import matter from 'gray-matter';
 import { compareDesc } from 'date-fns';
 
-// 1. Define the base properties shared by ALL content
+// Base metadata interface for all content
 interface BaseContentMetadata {
   slug: string;
   title: string;
@@ -14,71 +14,76 @@ interface BaseContentMetadata {
   published: boolean;
 }
 
-// 2. Define the specific properties for Articles
+// Specific metadata for articles
 export interface ArticleMetadata extends BaseContentMetadata {
-  date: string; // Articles must have a date
+  date: string;
 }
 
-// 3. Define the specific properties for Projects
+// Specific metadata for projects
 export interface ProjectMetadata extends BaseContentMetadata {
-  date?: string; // Projects might have a date, but it's optional
+  date?: string; // Date is optional for projects
   imageUrl: string;
   liveUrl?: string;
   repoUrl?: string;
 }
 
-// A generic "union" type that can be either an Article or a Project
-export type ContentMetadata = ArticleMetadata | ProjectMetadata;
-
-
+// A helper function to get the content directory path
 const getContentDirectory = (type: 'articles' | 'projects') => {
   return path.join(process.cwd(), `content/${type}`);
 };
 
-
-export const getSortedContentData = <T extends BaseContentMetadata>(
+/**
+ * Reads all .mdx files from a directory, parses their frontmatter,
+ * and returns them sorted by date.
+ */
+export const getSortedContentData = async <T extends BaseContentMetadata>(
   type: 'articles' | 'projects'
-): T[] => {
+): Promise<T[]> => {
   const contentDirectory = getContentDirectory(type);
-  const fileNames = fs.readdirSync(contentDirectory);
+  const fileNames = await fs.readdir(contentDirectory);
 
-  const allContentData = fileNames
-    .filter(fileName => fileName.endsWith('.mdx'))
-    .map(fileName => {
-      const slug = fileName.replace(/\.mdx$/, '');
-      const fullPath = path.join(contentDirectory, fileName);
-      const fileContents = fs.readFileSync(fullPath, 'utf8');
-      const matterResult = matter(fileContents);
+  const allContentData = await Promise.all(
+    fileNames
+      .filter((fileName) => fileName.endsWith('.mdx'))
+      .map(async (fileName) => {
+        const slug = fileName.replace(/\.mdx$/, '');
+        const fullPath = path.join(contentDirectory, fileName);
+        const fileContents = await fs.readFile(fullPath, 'utf8');
+        const { data } = matter(fileContents);
+        return { slug, ...data } as T;
+      })
+  );
 
-      return {
-        slug,
-        ...(matterResult.data as Omit<T, 'slug'>),
-      };
-    });
-  
-  const publishedContent = allContentData.filter(content => content.published);
+  // Filter out any content that is not marked as published
+  const publishedContent = allContentData.filter((content) => content.published);
 
-  // Sort content by date (if it exists)
-  // The 'as any' is a safe way to handle the fact that date is optional on projects
-  return publishedContent.sort((a: any, b: any) => {
-    if (a.date && b.date) {
-      return compareDesc(new Date(a.date), new Date(b.date));
+  // Sort the content by date in descending order (newest first)
+  return publishedContent.sort((a, b) => {
+    const aDate = (a as ArticleMetadata).date;
+    const bDate = (b as ArticleMetadata).date;
+    if (aDate && bDate) {
+      return compareDesc(new Date(aDate), new Date(bDate));
     }
     return 0;
-  }) as T[];
-}; 
+  });
+};
 
-
-export const getContentBySlug = (type: 'articles' | 'projects', slug: string) => {
+/**
+ * Reads a single .mdx file by its slug and returns its
+ * parsed metadata and content.
+ */
+export const getContentBySlug = async (
+  type: 'articles' | 'projects',
+  slug: string
+) => {
   const contentDirectory = getContentDirectory(type);
   const fullPath = path.join(contentDirectory, `${slug}.mdx`);
-  const fileContents = fs.readFileSync(fullPath, 'utf8');
+  const fileContents = await fs.readFile(fullPath, 'utf8');
 
-  // Use gray-matter to parse the post metadata section
   const { data, content } = matter(fileContents);
 
   return {
-    metadata: data, // This is the frontmatter object
-    content: content, // This is the MDX content string
+    metadata: data,
+    content,
   };
 };

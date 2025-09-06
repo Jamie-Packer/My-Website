@@ -13,7 +13,16 @@ export async function generateStaticParams() {
   }));
 }
 
-export default async function ArticlePage({ params: { slug } }: { params: { slug: string } }) {
+interface ArticlePageProps {
+  params: {
+    slug: string;
+  };
+}
+
+export default async function ArticlePage({ params }: ArticlePageProps) {
+  // vvv THIS IS THE CORRECT FIX FROM THE DOCUMENTATION vvv
+  const { slug } = await params;
+
   const { metadata, content } = await getContentBySlug('articles', slug);
   const articleMetadata = metadata as ArticleMetadata;
 
