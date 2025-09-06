@@ -1,23 +1,41 @@
 ---
 title: 'MDX Feature Test'
 date: '2025-09-05'
-description: 'A comprehensive test of various Markdown and MDX features to see how they are rendered.'
+description: 'A test of various Markdown and MDX features to see how they are rendered.'
 tags: ['MDX', 'Test', 'Features']
-published: true
+published: false
 ---
 
 import YouTubeEmbed from '@/components/YouTubeEmbed';
+
+# Hello Anchooki {"<"}3
+
+
+<img 
+  src="https://media.tenor.com/nZ3L4F1mFcYAAAAM/saul-goodman-lithuania-flag.gif" 
+  alt="Saul Goodman with Lithuania Flag GIF" 
+  width="10000"
+  className="block mx-auto"
+/>
+
+
+<YouTubeEmbed videoId="NNcKX2XORQQ" />
+
+<p>Pooker Tooker! :D</p>
+
+![Mike Pukuotukas](https://vmarkus.lt/wp-content/uploads/2022/04/1604LT-768x403.png)
 
 # Heading 1
 ## Heading 2
 ### Heading 3
 
-This paragraph contains **bold text**, *italic text*, and ~~strikethrough text~~.
+This paragraph contains **bold text** and *italic text*.
+
+<del>This will be struck through</del>
 
 > This is a blockquote. It's useful for highlighting a quote or an important note.
 
 
-<YouTubeEmbed videoId="NNcKX2XORQQ" />
 ---
 
 ### Lists
@@ -44,7 +62,5 @@ And here is a multi-line JavaScript code block with syntax highlighting:
 function greet(name) {
   console.log(`Hello, ${name}!`);
 }
-
 greet('World');
 ```
-test
