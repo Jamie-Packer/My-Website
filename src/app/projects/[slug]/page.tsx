@@ -1,5 +1,3 @@
-// src/app/projects/[slug]/page.tsx
-
 import { getSortedContentData, getContentBySlug, ProjectMetadata } from '@/lib/content';
 import { MDXRemote } from 'next-mdx-remote/rsc';
 import Navbar from '@/components/Navbar';
@@ -15,7 +13,7 @@ export async function generateStaticParams() {
   }));
 }
 
-export default async function ProjectPage({ params }: { params: { slug: string } }) {
+export default async function ProjectPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
 
   const { metadata, content } = await getContentBySlug('projects', slug);
@@ -31,20 +29,30 @@ export default async function ProjectPage({ params }: { params: { slug: string }
             <p className="text-foreground2 text-xl mb-6">{projectMetadata.description}</p>
             <div className="flex flex-wrap gap-6 items-center">
               {projectMetadata.liveUrl && (
-                <a href={projectMetadata.liveUrl} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 font-semibold text-foreground hover:text-accent transition-colors duration-200">
+                <a
+                  href={projectMetadata.liveUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 font-semibold text-foreground hover:text-accent transition-colors duration-200"
+                >
                   <ExternalLinkIcon className="w-5 h-5" />
                   Live Site
                 </a>
               )}
               {projectMetadata.repoUrl && (
-                <a href={projectMetadata.repoUrl} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 font-semibold text-foreground hover:text-accent transition-colors duration-200">
+                <a
+                  href={projectMetadata.repoUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 font-semibold text-foreground hover:text-accent transition-colors duration-200"
+                >
                   <GitHubIcon className="w-5 h-5" />
                   GitHub Repo
                 </a>
               )}
             </div>
           </div>
-          
+
           <div className="mb-12">
             <Image
               src={projectMetadata.imageUrl}
