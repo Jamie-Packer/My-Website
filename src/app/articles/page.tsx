@@ -21,13 +21,12 @@ const ArticlesPage = async () => {
               key={article.slug}
               title={article.title}
               date={article.date}
-              description={article.description}
+              description={article.description ?? ""}   // ensure string
               slug={article.slug}
-              tags={article.tags} 
+              tags={article.tags ?? []}                 // ensure array
             />
           ))}
         </div>
-
       </div>
       <Footer />
     </main>

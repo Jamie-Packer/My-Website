@@ -5,9 +5,7 @@ import Footer from "@/components/Footer";
 import ProjectCard from "@/components/ProjectCard";
 import { getSortedContentData, ProjectMetadata } from "@/lib/content";
 
-// vvv FIX: Make the component async
 export default async function ProjectsPage() {
-  // vvv FIX: Await the result of the function call
   const projects = await getSortedContentData<ProjectMetadata>('projects');
   
   return (
@@ -21,7 +19,16 @@ export default async function ProjectsPage() {
         
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           {projects.map((project) => (
-            <ProjectCard key={project.slug} {...project} />
+            <ProjectCard
+              key={project.slug}
+              slug={project.slug}
+              title={project.title}
+              description={project.description ?? ""}   // ensure string
+              imageUrl={project.imageUrl}
+              tags={project.tags ?? []}                 // ensure array
+              liveUrl={project.liveUrl}
+              repoUrl={project.repoUrl}
+            />
           ))}
         </div>
       </div>
