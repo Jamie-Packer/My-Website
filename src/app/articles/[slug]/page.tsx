@@ -1,10 +1,9 @@
-// src/app/projects/[slug]/page.tsx
-
 import { getSortedContentData, getContentBySlug, ArticleMetadata } from '@/lib/content';
 import { MDXRemote } from 'next-mdx-remote/rsc';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import YouTubeEmbed from '@/components/YouTubeEmbed';
+import { notFound } from 'next/navigation';
 
 export async function generateStaticParams() {
   const articles = await getSortedContentData<ArticleMetadata>('articles');
@@ -16,7 +15,10 @@ export async function generateStaticParams() {
 export default async function ArticlePage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
 
-  const { metadata, content } = await getContentBySlug('articles', slug);
+  const entry = await getContentBySlug<ArticleMetadata>('articles', slug);
+  if (!entry) return notFound();
+
+  const { metadata, content } = entry;
   const articleMetadata = metadata as ArticleMetadata;
 
   const components = {
