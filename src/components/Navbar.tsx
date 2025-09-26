@@ -1,28 +1,33 @@
-import Link from 'next/link';
+// src/components/Navbar.tsx
+import Link from "next/link";
 
 const Navbar = () => {
   return (
     <nav className="bg-background border-b border-zinc-500">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-center h-16">
-          <div className="flex items-center space-x-8 md:space-x-2 font-heading">
-            <Link 
-              href="/articles" 
-              className="text-foreground2 rounded-md px-10 py-3 text-base font-medium transition-colors duration-200 hover:bg-accent/25 hover:text-white"
+        {/* Mobile: spread out | Desktop: centered */}
+        <div className="flex h-16 items-center justify-between md:justify-center">
+          <div className="flex w-full items-center justify-between font-heading md:w-auto md:space-x-8 md:space-x-2">
+            {/* Articles */}
+            <Link
+              href="/articles"
+              className="inline-flex h-14 items-center justify-center rounded-md px-4 text-sm font-medium text-foreground2 transition-colors duration-300 hover:bg-accent/25 md:px-8 md:text-base"
             >
               Articles
             </Link>
 
-            <Link 
-              href="/" 
-              className="text-foreground text-2xl rounded-md px-16 py-3 transition-colors duration-200 hover:bg-accent/35"
+            {/* Home / Jamie Packer */}
+            <Link
+              href="/"
+              className="inline-flex h-14 items-center justify-center rounded-md px-4 text-foreground transition-colors duration-300 hover:bg-accent/35 md:px-8"
             >
-              Jamie Packer
+              <span className="text-xl leading-none md:text-2xl">Jamie Packer</span>
             </Link>
 
-            <Link 
-              href="/projects" 
-              className="text-foreground2 rounded-md px-10 py-3 text-base font-medium transition-colors duration-200 hover:bg-accent/25 hover:text-white"
+            {/* Projects */}
+            <Link
+              href="/projects"
+              className="inline-flex h-14 items-center justify-center rounded-md px-4 text-sm font-medium text-foreground2 transition-colors duration-300 hover:bg-accent/25 md:px-8 md:text-base"
             >
               Projects
             </Link>
