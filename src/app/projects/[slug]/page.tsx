@@ -1,3 +1,5 @@
+// src\app\projects\[slug]\page.tsx
+
 import { getSortedContentData, getContentBySlug, ProjectMetadata } from '@/lib/content';
 import { MDXRemote } from 'next-mdx-remote/rsc';
 import Navbar from '@/components/Navbar';
