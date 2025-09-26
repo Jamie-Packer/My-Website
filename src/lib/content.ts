@@ -1,89 +1,96 @@
 // src/lib/content.ts
+import fs from "node:fs/promises";
+import path from "node:path";
+import matter from "gray-matter";
 
-import fs from 'fs/promises';
-import path from 'path';
-import matter from 'gray-matter';
-import { compareDesc } from 'date-fns';
+// Public types consumed by pages
+export interface ArticleMetadata {
+  title: string;
+  date: string;              // ISO date
+  description?: string;
+  imageUrl?: string;
+  /** If false, hide from listings; still accessible directly by URL. */
+  published?: boolean;
+  tags?: string[];
+}
 
-// Base metadata interface for all content
-interface BaseContentMetadata {
-  slug: string;
+export interface ProjectMetadata {
   title: string;
   description: string;
-  tags: string[];
-  published: boolean;
-}
-
-// Specific metadata for articles
-export interface ArticleMetadata extends BaseContentMetadata {
-  date: string;
-}
-
-// Specific metadata for projects
-export interface ProjectMetadata extends BaseContentMetadata {
-  date?: string; // Date is optional for projects
   imageUrl: string;
   liveUrl?: string;
   repoUrl?: string;
+  date?: string;             // optional
+  /** If false, hide from listings; still accessible directly by URL. */
+  published?: boolean;
+  tags?: string[];
 }
 
-// A helper function to get the content directory path
-const getContentDirectory = (type: 'articles' | 'projects') => {
-  return path.join(process.cwd(), `content/${type}`);
-};
+type Kind = "articles" | "projects";
+type WithSlug<T> = T & { slug: string };
+
+function dirFor(type: Kind) {
+  return path.join(process.cwd(), "content", type);
+}
 
 /**
- * Reads all .mdx files from a directory, parses their frontmatter,
- * and returns them sorted by date.
+ * Return all items for a section except those explicitly marked `published: false`.
+ * Sort newest-first when `date` is present; otherwise by slug.
  */
-export const getSortedContentData = async <T extends BaseContentMetadata>(
-  type: 'articles' | 'projects'
-): Promise<T[]> => {
-  const contentDirectory = getContentDirectory(type);
-  const fileNames = await fs.readdir(contentDirectory);
+export async function getSortedContentData<
+  T extends { date?: string; published?: boolean; tags?: string[] }
+>(type: Kind): Promise<Array<WithSlug<T>>> {
+  const dir = dirFor(type);
+  const files = await fs.readdir(dir);
 
-  const allContentData = await Promise.all(
-    fileNames
-      .filter((fileName) => fileName.endsWith('.mdx'))
-      .map(async (fileName) => {
-        const slug = fileName.replace(/\.mdx$/, '');
-        const fullPath = path.join(contentDirectory, fileName);
-        const fileContents = await fs.readFile(fullPath, 'utf8');
-        const { data } = matter(fileContents);
-        return { slug, ...data } as T;
-      })
-  );
+  const items: Array<WithSlug<T>> = [];
 
-  // Filter out any content that is not marked as published
-  const publishedContent = allContentData.filter((content) => content.published);
+  for (const file of files) {
+    if (!file.endsWith(".mdx")) continue;
+    const slug = file.slice(0, -4);
+    const fullPath = path.join(dir, file);
+    const raw = await fs.readFile(fullPath, "utf8");
+    const { data } = matter(raw);
+    const meta = data as T;
+    items.push({ slug, ...meta });
+  }
 
-  // Sort the content by date in descending order (newest first)
-  return publishedContent.sort((a, b) => {
-    const aDate = (a as ArticleMetadata).date;
-    const bDate = (b as ArticleMetadata).date;
-    if (aDate && bDate) {
-      return compareDesc(new Date(aDate), new Date(bDate));
-    }
-    return 0;
+  const visible = items.filter((it) => it.published !== false);
+
+  visible.sort((a, b) => {
+    const ad = a.date ? Date.parse(a.date) : Number.NaN;
+    const bd = b.date ? Date.parse(b.date) : Number.NaN;
+
+    if (!Number.isNaN(ad) && !Number.isNaN(bd)) return bd - ad; // newest first
+    if (!Number.isNaN(ad)) return -1;
+    if (!Number.isNaN(bd)) return 1;
+    return a.slug.localeCompare(b.slug);
   });
-};
+
+  return visible;
+}
 
 /**
- * Reads a single .mdx file by its slug and returns its
- * parsed metadata and content.
+ * Load a single entry by slug. Does not check `published`,
+ * so hidden items remain accessible via direct URL.
+ * Returns null only if the file does not exist.
  */
-export const getContentBySlug = async (
-  type: 'articles' | 'projects',
+export async function getContentBySlug<T extends object>(
+  type: Kind,
   slug: string
-) => {
-  const contentDirectory = getContentDirectory(type);
-  const fullPath = path.join(contentDirectory, `${slug}.mdx`);
-  const fileContents = await fs.readFile(fullPath, 'utf8');
+): Promise<{ metadata: WithSlug<T>; content: string } | null> {
+  const fullPath = path.join(dirFor(type), `${slug}.mdx`);
 
-  const { data, content } = matter(fileContents);
+  let raw: string;
+  try {
+    raw = await fs.readFile(fullPath, "utf8");
+  } catch (err) {
+    const e = err as NodeJS.ErrnoException;
+    if (e.code === "ENOENT") return null;
+    throw err;
+  }
 
-  return {
-    metadata: data,
-    content,
-  };
-};
+  const { data, content } = matter(raw);
+  const meta = data as T;
+  return { metadata: { slug, ...meta }, content };
+}

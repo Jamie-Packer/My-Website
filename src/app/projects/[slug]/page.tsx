@@ -5,6 +5,7 @@ import Footer from '@/components/Footer';
 import Image from 'next/image';
 import ExternalLinkIcon from '@/components/icons/ExternalLinkIcon';
 import GitHubIcon from '@/components/icons/GitHubIcon';
+import { notFound } from 'next/navigation';
 
 export async function generateStaticParams() {
   const projects = await getSortedContentData<ProjectMetadata>('projects');
@@ -16,7 +17,10 @@ export async function generateStaticParams() {
 export default async function ProjectPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
 
-  const { metadata, content } = await getContentBySlug('projects', slug);
+  const entry = await getContentBySlug<ProjectMetadata>('projects', slug);
+  if (!entry) return notFound();
+
+  const { metadata, content } = entry;
   const projectMetadata = metadata as ProjectMetadata;
 
   return (
