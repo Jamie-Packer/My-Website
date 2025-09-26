@@ -11,6 +11,7 @@ export interface ArticleMetadata {
   imageUrl?: string;
   /** If false, hide from listings; still accessible directly by URL. */
   published?: boolean;
+  tags?: string[];
 }
 
 export interface ProjectMetadata {
@@ -22,6 +23,7 @@ export interface ProjectMetadata {
   date?: string;             // optional
   /** If false, hide from listings; still accessible directly by URL. */
   published?: boolean;
+  tags?: string[];
 }
 
 type Kind = "articles" | "projects";
@@ -36,7 +38,7 @@ function dirFor(type: Kind) {
  * Sort newest-first when `date` is present; otherwise by slug.
  */
 export async function getSortedContentData<
-  T extends { date?: string; published?: boolean }
+  T extends { date?: string; published?: boolean; tags?: string[] }
 >(type: Kind): Promise<Array<WithSlug<T>>> {
   const dir = dirFor(type);
   const files = await fs.readdir(dir);
