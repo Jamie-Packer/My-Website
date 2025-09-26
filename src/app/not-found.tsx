@@ -20,33 +20,25 @@ export default function NotFound() {
 
         <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
           <Link
-            href="/"
-            className="rounded-xl border px-4 py-2 text-sm font-medium hover:bg-neutral-50"
+            href="/articles"
+            className="rounded-xl border px-4 py-2 text-sm font-medium hover:opacity-90"
           >
-            Go home
+            Articles
           </Link>
           <Link
-            href="/articles"
-            className="rounded-xl bg-black px-4 py-2 text-sm font-medium text-white hover:opacity-90"
+            href="/"
+            className="rounded-xl bg-accent px-4 py-2 text-sm font-medium text-white hover:opacity-90"
           >
-            Read articles
+            Home
           </Link>
           <Link
             href="/projects"
-            className="rounded-xl border px-4 py-2 text-sm font-medium hover:bg-neutral-50"
+            className="rounded-xl border px-4 py-2 text-sm font-medium hover:opacity-90"
           >
             View projects
           </Link>
         </div>
 
-        <div className="mt-10 rounded-2xl border p-4 text-left">
-          <h2 className="text-sm font-semibold">Debug info</h2>
-          <ul className="mt-2 text-xs text-neutral-600">
-            <li>Route: not-found.tsx (App Router)</li>
-            <li>Framework: Next.js + TypeScript</li>
-            <li>Styling: Tailwind CSS v4</li>
-          </ul>
-        </div>
       </section>
     </main>
   );
