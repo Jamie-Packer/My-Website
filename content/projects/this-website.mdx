@@ -1,7 +1,7 @@
 ---
 title: 'This Website!'
 date: '2025-09-06'
-description: 'My personal portfolio site for showcasing my data projects and writing. While my core expertise is in data, I developed this site end-to-end from scratch with modern web tools.'
+description: 'My personal website for showcasing my data projects and writing. While my core expertise is in data, I developed this site from scratch with modern web tools.'
 imageUrl: '/images/projects/JamiePackerCom.svg'
 tags: ['Web Development', 'Next.js', 'React', 'TypeScript', 'Tailwind CSS v4']
 published: true
@@ -11,13 +11,76 @@ repoUrl: 'https://github.com/Jamie-Packer/My-Website'
 
 <h1 className="font-heading">The Story of This Website</h1>
 
-I built this website from the ground up to serve as my personal hub on the internet, showcasing my projects and articles. My goal was to create a fast, dynamic, and modern site without relying on a pre-built solution like Squarespace.
+It's likely a natural inclination to have somewhere on the internet to call your own, a digital extension of a desire for territory. 
+And I assume that for most people this desire is satisfied by a social media profile. 
+But I think "social" media SUCKS, so my presence (if at all) on those platforms I keep limited. 
 
-The development followed an **iterative cycle**, breaking the project down into manageable phases. After completing each phase, such as setting up the foundational components or building the content system, the changes were immediately deployed to Vercel. This process of **continuous delivery** ensured the live site was always functional and up-to-date with the latest features, allowing for regular progress checks and a less daunting overall development experience.
+Which is why I built this website. It's mine, it’s fully <span className="rainbow-text">customisable</span>,
+and it’s free from the brain-rot **SLOP** features present on *every* social media platform (even LinkedIn). 
+Here people can find some information about me, see what I've been up to via my projects and articles and get in contact with me.
 
 ---
+<h1 className="font-heading">Development</h1>
 
-<h2 className="font-heading">Technical Stack</h2>
+When it comes to making a website, there are roughly three options:
+ - Use an **"all-in-one" builder** (Wix/Squarespace): Non-technical, expensive subscription!
+ - **Hire a developer** or agency: Non-technical, expensive!  
+ - **Do it yourself**, from scratch or with a template: Technical, cheap.
+
+I created this website just after finishing university, so as you might guess, being broke and with time on my hands, I decided to build it myself.
+As my speciality is data science, not web development, the extent of my web-dev knowledge before this project was my base of programming knowledge + 
+a small amount I learnt about the internet and HTML in school/college. Everything else I taught myself. 
+
+<h2 className="font-heading">The Process</h2>
+
+From my starting point, to a fully working live website ready to fill with content, it took a little over a week. 
+To organise the project, I used a general project lifecycle approach, split into three distinct phases.
+
+<h3 className="font-heading">Phase I: Specification and Requirements</h3>
+
+Obviously I needed a vision for what the website would look like. This included the functionalities I wanted, my budget, and time constraints.
+
+<h3 className="font-heading">Phase II: Research and Planning (The most important) </h3> 
+
+Once I knew explicitly what I wanted for the website, I spent a good few days researching and planning the project.
+Due to my relative lack of web-development knowledge, this was a substantial amount of learning. 
+I learnt what was required for the website and about the current state of the web development field so that I could make informed choices regarding the technologies I used.
+This involved learning about things such as getting a domain, the pros and cons of common tech stacks, different deployment platforms, frameworks, and more.
+All of the decisions made were factoring in scalability and cost if I wanted to build something bigger in the future.
+
+<h4 className="font-heading">How I did it conceptually:</h4>
+
+Since web development is a large field, **the most important thing that I did** during this research and planning **was managing complexity.** 
+On a more psychological level, this is the secret sauce that I used to keep me motivated to work on and research the project. 
+
+I found that the key skill to research like this is 
+<a href="https://chatgpt.com/s/t_68d9443d28dc8191a4a056778a11bfba" target="_blank" rel="noopener noreferrer">metacognitive regulation</a>. 
+Work top-down, from the higher-level concepts downwards, marking rabbit holes which require further knowledge for the decision to proceed down or avoid. 
+This strategy generally, at any given time, kept my next steps *known* and within my 
+<a href="https://en.wikipedia.org/wiki/Zone_of_proximal_development" target="_blank" rel="noopener noreferrer">zone of proximal development</a>.
+
+<h3 className="font-heading">Phase III: Execution — Coding and Deployment</h3>
+
+Once I started coding, I had a fully functional live site in four days. I began with the homepage, then implemented the content system for the articles and projects, tweaking styling continuously as I went. 
+
+The code itself was mostly *vibe-coded*, and at this moment in time the term "vibe-coded" can mean a variety of things so I will elaborate a bit on my process. 
+First, the LLM would be given very specific context files and instructions (more complex than it sounds). 
+Then individual portions of code would be generated, and chiseled down manually or by prompts into a working, tested state.
+
+When *vibe-coding* something, I believe it is absolutely best practice to understand what each line of code does, and the important parts of the syntax. 
+This approach allows one to focus almost entirely on the logic, structure and purpose of the code, whilst abstracting away superfluous specifics. 
+Your brain quite literally only has so much RAM. This is how I implement generative AI in my data science work.
+
+However, since this project was not so critical, and I don't have a particular interest in going into web-dev, I’d call what I was doing **B-Grade vibe coding**: I understood everything at least at the block level — how components fit together, what each file was for, and the logic tying it all up — but I wasn’t memorising every detail of the syntax.
+
+Whilst this approach did speed things up considerably overall, I was very quickly reminded why this can be a bad idea. At one point, the LLM I was using assumed the existence of a config file that had been required in older Tailwind versions but was no longer needed in v4. That single wrong assumption wasted more time than it should have, but it was also a useful reminder about versioning and the importance of good LLM context. **In short, AI can accelerate the process, but you still have to keep it on a leash.** 
+
+Another, rather embarrassing, mistake I made early on was pushing big commits directly to main and just crossing my fingers that the deployment would work. Of course, it didn’t always. A few failed builds later I realised that proper branching with preview deployments is the way to go. It’s a very noobie error to make, but one that I’ve corrected and learnt from. 
+
+Despite these mistakes, the website came together pretty quick. I learnt a great deal and now have my very own website exactly how I want it :)
+
+---
+<h2 className="font-heading">The Stack</h2>
 
 This project is built on a modern, robust set of technologies, chosen for their performance and flexibility.
 
@@ -28,12 +91,12 @@ This project is built on a modern, robust set of technologies, chosen for their 
 - **Vercel**: The platform used for seamless deployment and hosting, providing a smooth path from development to production.
 
 ---
+<h2 className="font-heading">Potential Future Plans</h2>
 
-<h2 className="font-heading">Future Plans</h2>
+There can always be more things! 
 
-I'm always looking to improve and expand this site. Some of my plans for the future include:
+Some of my plans for the future include:
 
-- **Implementing a contact form**: To make it easy for people to get in touch.
-- **Considering a content database**: As the amount of content grows, I may explore migrating from local MDX files to an external database to improve content management and scalability.
-- **SEO Optimization**: Implementing better meta descriptions and titles for each page to improve search engine visibility.
 - **Adding more content**: The most important next step is to populate the site with more projects and articles!
+- **Implementing a contact form**: To make it easy for people to get in touch.
+- **Content database**: As the amount of content grows, I may explore migrating from local MDX files to an external database to improve content management and scalability.
