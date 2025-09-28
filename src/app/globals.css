@@ -40,3 +40,70 @@ body {
 html {
   scroll-behavior: smooth;
 }
+
+
+
+
+
+
+
+
+
+
+
+/* Custom Animations */
+
+@keyframes rainbow-scroll {
+  0% {
+    background-position: 0% 50%;
+  }
+  100% {
+    background-position: 100% 50%;
+  }
+}
+
+@keyframes wobble {
+  0%, 100% {
+    transform: rotate(-6deg) translateY(0);
+  }
+  25% {
+    transform: rotate(6deg) translateY(-6px);
+  }
+  50% {
+    transform: rotate(-3deg) translateY(0);
+  }
+  75% {
+    transform: rotate(3deg) translateY(-10px);
+  }
+}
+
+.rainbow-text {
+  vertical-align: bottom; /* shift alignment upward */
+  transform-origin: bottom center; /* wobble from the bottom edge */
+  font-size: 2.75rem; /* text-6xl */
+  font-weight: 800;   /* font-extrabold */
+  display: inline-block;
+  background: linear-gradient(
+    270deg,
+    #ff0000,
+    #000000,
+    #ff0000,
+    #00ffff,
+    #ff0000,
+    #0080ff,
+    #ff0080,
+    #ff0000
+  );
+  background-size: 600% 600%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-fill-color: transparent;
+  animation: rainbow-scroll 3s linear infinite alternate,
+             wobble 1.5s ease-in-out infinite;
+}
+
+
+
+
+
