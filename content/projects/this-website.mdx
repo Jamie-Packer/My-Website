@@ -20,7 +20,44 @@ and it’s free from the brain-rot **SLOP** features present on *every* social m
 Here people can find some information about me, see what I've been up to via my projects and articles and get in contact with me.
 
 ---
-<h1 className="font-heading">Development</h1>
+<details className="group border border-foreground/10 rounded-lg p-4 bg-background/40">
+  <summary className="flex items-center gap-2 cursor-pointer select-none font-heading text-xl">
+    <svg
+      className="size-4 transition-transform duration-200 group-open:rotate-90"
+      viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"
+    >
+      <path d="M6 6l6 4-6 4V6z" />
+    </svg>
+    Contents
+  </summary>
+
+  <nav className="mt-3 pl-6 leading-relaxed">
+    <ul className="list-disc">
+      <li><a href="#dev">Development</a></li>
+      <li>
+        <a href="#process">The Process</a>
+        <ul className="list-disc pl-6 mt-1">
+          <li><a href="#phase-1">Phase I: Specification and Requirements</a></li>
+          <li>
+            <a href="#phase-2">Phase II: Research and Planning (The most important)</a>
+            <ul className="list-disc pl-6 mt-1">
+              <li><a href="#conceptual">How I did it conceptually</a></li>
+              <li><a href="#practical">How I did it practically</a></li>
+            </ul>
+          </li>
+          <li><a href="#phase-3">Phase III: Execution — Coding and Deployment</a></li>
+        </ul>
+      </li>
+      <li><a href="#stack">The Stack</a></li>
+      <li><a href="#future">Potential Future Plans</a></li>
+    </ul>
+  </nav>
+</details>
+
+
+
+---
+<h1 id="dev" className="font-heading">Development</h1>
 
 When it comes to making a website, there are roughly three options:
  - Use an **"all-in-one" builder** (Wix/Squarespace): Non-technical, expensive subscription!
@@ -31,27 +68,28 @@ I created this website just after finishing university, so as you might guess, b
 As my speciality is data science, not web development, the extent of my web-dev knowledge before this project was my base of programming knowledge + 
 a small amount I learnt about the internet and HTML in school/college. Everything else I taught myself. 
 
-<h2 className="font-heading">The Process</h2>
+<h2 id="process" className="font-heading">The Process</h2>
 
-From my starting point, to a fully working live website ready to fill with content, it took a little over a week. 
+It took a little over a week to get from my starting point, to a fully working live website ready to fill with content.
 To organise the project, I used a general project lifecycle approach, split into three distinct phases.
 
-<h3 className="font-heading">Phase I: Specification and Requirements</h3>
+<h3 id="phase-1" className="font-heading">Phase I: Specification and Requirements</h3>
 
 Obviously I needed a vision for what the website would look like. This included the functionalities I wanted, my budget, and time constraints.
+Whilst it might sound simple, this is very important as planning and research becomes pretty rough if you don't know what to plan or research.
 
-<h3 className="font-heading">Phase II: Research and Planning (The most important) </h3> 
+<h3 id="phase-2" className="font-heading">Phase II: Research and Planning (The most important) </h3>
 
-Once I knew explicitly what I wanted for the website, I spent a good few days researching and planning the project.
+I spent a good few days researching and planning the project.
 Due to my relative lack of web-development knowledge, this was a substantial amount of learning. 
 I learnt what was required for the website and about the current state of the web development field so that I could make informed choices regarding the technologies I used.
-This involved learning about things such as getting a domain, the pros and cons of common tech stacks, different deployment platforms, frameworks, and more.
-All of the decisions made were factoring in scalability and cost if I wanted to build something bigger in the future.
+This involved learning about things such as the pros and cons of common tech stacks, different deployment platforms, frameworks, and more.
+**All of the decisions made factored in maintenance and cost**, but also **scalability** if I wanted to build something bigger in the future, seeing the skills developed here as a potential investment.
 
-<h4 className="font-heading">How I did it conceptually:</h4>
+<h4 id="conceptual" className="font-heading">How I did it conceptually:</h4>
 
 Since web development is a large field, **the most important thing that I did** during this research and planning **was managing complexity.** 
-On a more psychological level, this is the secret sauce that I used to keep me motivated to work on and research the project. 
+On a psychological level, this is the secret sauce that I used to keep me motivated to work on the project. 
 
 I found that the key skill to research like this is 
 <a href="https://chatgpt.com/s/t_68d9443d28dc8191a4a056778a11bfba" target="_blank" rel="noopener noreferrer">metacognitive regulation</a>. 
@@ -59,7 +97,15 @@ Work top-down, from the higher-level concepts downwards, marking rabbit holes wh
 This strategy generally, at any given time, kept my next steps *known* and within my 
 <a href="https://en.wikipedia.org/wiki/Zone_of_proximal_development" target="_blank" rel="noopener noreferrer">zone of proximal development</a>.
 
-<h3 className="font-heading">Phase III: Execution — Coding and Deployment</h3>
+
+<h4 id="practical" className="font-heading">How I did it practically:</h4>
+
+Since teaching quality at universities nowadays is... you know. I am very familiar with self-learning and researching.
+Particularly regarding use of large language models (LLMs) for modern learning. Using careful context and prompt engineering I had my current daily LLM understand my requirements,
+figure out my current knowledge level, outline a learning plan and engage in ***active-recall*** **centered conversations** to build my knowledge fast and efficiently.
+This was also supplemented with youtube videos, which lead to feeding ideas into the conversations and so on. Dynamic, focused research.
+
+<h3 id="phase-3" className="font-heading">Phase III: Execution — Coding and Deployment</h3>
 
 Once I started coding, I had a fully functional live site in four days. I began with the homepage, then implemented the content system for the articles and projects, tweaking styling continuously as I went. 
 
@@ -67,7 +113,7 @@ The code itself was mostly *vibe-coded*, and at this moment in time the term "vi
 First, the LLM would be given very specific context files and instructions (more complex than it sounds). 
 Then individual portions of code would be generated, and chiseled down manually or by prompts into a working, tested state.
 
-When *vibe-coding* something, I believe it is absolutely best practice to understand what each line of code does, and the important parts of the syntax. 
+When using LLMs to help code, I believe it is absolutely best practice to understand exactly what your code does, and the important parts of the syntax. 
 This approach allows one to focus almost entirely on the logic, structure and purpose of the code, whilst abstracting away superfluous specifics. 
 Your brain quite literally only has so much RAM. This is how I implement generative AI in my data science work.
 
@@ -80,7 +126,7 @@ Another, rather embarrassing, mistake I made early on was pushing big commits di
 Despite these mistakes, the website came together pretty quick. I learnt a great deal and now have my very own website exactly how I want it :)
 
 ---
-<h2 className="font-heading">The Stack</h2>
+<h2 id="stack" className="font-heading">The Stack</h2>
 
 This project is built on a modern, robust set of technologies, chosen for their performance and flexibility.
 
@@ -91,7 +137,7 @@ This project is built on a modern, robust set of technologies, chosen for their 
 - **Vercel**: The platform used for seamless deployment and hosting, providing a smooth path from development to production.
 
 ---
-<h2 className="font-heading">Potential Future Plans</h2>
+<h2 id="future" className="font-heading">Potential Future Plans</h2>
 
 There can always be more things! 
 
