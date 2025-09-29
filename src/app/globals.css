@@ -1,36 +1,32 @@
-/* src/globals.css */
+/* src/app/globals.css */
 @import "tailwindcss";
 @plugin "@tailwindcss/typography";
 
-
+/* Theme tokens (dark-only) */
 :root {
-    --background: #ffffff; 
-    --background2: #bbbbbb;
-    --foreground: #1d1d1d;
-    --foreground2: #333333;
-    --accent: #800000;
+  --background: #1d1d1d;
+  --background2: #2d2d2d;
+  --foreground: #ffffff;   /* primary text (e.g., headings, default links) */
+  --foreground2: #cccccc;  /* secondary text (e.g., paragraphs) */
+  --accent: #800000;       /* brand accent */
+
+  /* Hint to the browser for native dark UI */
+  color-scheme: dark;
 }
 
+/* Tailwind v4 inline theme mapping */
 @theme inline {
   --color-background: var(--background);
+  --color-background2: var(--background2);
   --color-foreground: var(--foreground);
   --color-foreground2: var(--foreground2);
-  --color-background2: var(--background2);
   --color-accent: var(--accent);
+
   --font-sans: var(--font-body);
   --font-heading: var(--font-heading);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #1d1d1d;
-    --background2: #2d2d2d;
-    --foreground: #ffffff;
-    --foreground2: #cccccc;
-    --accent: #800000;
-  }
-}
-
+/* Base document */
 body {
   font-family: var(--font-body);
   background: var(--background);
@@ -41,38 +37,78 @@ html {
   scroll-behavior: smooth;
 }
 
+/* Tailwind Typography → map to theme tokens for MDX (.prose) */
+.prose {
+  /* Body copy uses secondary text; headings use primary text */
+  --tw-prose-body: var(--foreground2);
+  --tw-prose-headings: var(--foreground);
 
-/* Custom Animations */
+  /* Links default to primary text; hover handled below */
+  --tw-prose-links: var(--foreground);
 
+  --tw-prose-bold: var(--foreground);
+  --tw-prose-counters: var(--foreground2);
+  --tw-prose-bullets: var(--foreground2);
+  --tw-prose-hr: color-mix(in oklab, var(--foreground) 15%, transparent);
+  --tw-prose-quotes: var(--foreground);
+  --tw-prose-quote-borders: color-mix(in oklab, var(--foreground) 25%, transparent);
+  --tw-prose-captions: var(--foreground2);
+  --tw-prose-code: var(--foreground);
+  --tw-prose-pre-bg: var(--background2);
+  --tw-prose-th-borders: color-mix(in oklab, var(--foreground) 18%, transparent);
+  --tw-prose-td-borders: color-mix(in oklab, var(--foreground) 10%, transparent);
+}
+
+/* Invert variant kept for compatibility; values match dark-only theme */
+.prose.prose-invert {
+  --tw-prose-invert-body: var(--foreground2);
+  --tw-prose-invert-headings: var(--foreground);
+  --tw-prose-invert-links: var(--foreground);
+  --tw-prose-invert-bold: var(--foreground);
+  --tw-prose-invert-counters: var(--foreground2);
+  --tw-prose-invert-bullets: var(--foreground2);
+  --tw-prose-invert-hr: color-mix(in oklab, var(--foreground) 15%, transparent);
+  --tw-prose-invert-quotes: var(--foreground);
+  --tw-prose-invert-quote-borders: color-mix(in oklab, var(--foreground) 25%, transparent);
+  --tw-prose-invert-captions: var(--foreground2);
+  --tw-prose-invert-code: var(--foreground);
+  --tw-prose-invert-pre-bg: var(--background2);
+  --tw-prose-invert-th-borders: color-mix(in oklab, var(--foreground) 18%, transparent);
+  --tw-prose-invert-td-borders: color-mix(in oklab, var(--foreground) 10%, transparent);
+}
+
+/* Prose link behavior: default = primary text; hover = accent */
+.prose :where(a) {
+  color: var(--foreground);
+  text-decoration-color: color-mix(in oklab, var(--foreground) 40%, transparent);
+}
+.prose :where(a:hover) {
+  color: var(--accent);
+  text-decoration-color: var(--accent);
+}
+/* Optional: keep visited links the same as default */
+.prose :where(a:visited) {
+  color: var(--foreground);
+}
+
+/* Custom animations (unchanged) */
 @keyframes rainbow-scroll {
-  0% {
-    background-position: 0% 50%;
-  }
-  100% {
-    background-position: 100% 50%;
-  }
+  0%   { background-position: 0% 50%; }
+  100% { background-position: 100% 50%; }
 }
 
 @keyframes wobble {
-  0%, 100% {
-    transform: rotate(-6deg) translateY(0);
-  }
-  25% {
-    transform: rotate(6deg) translateY(-6px);
-  }
-  50% {
-    transform: rotate(-3deg) translateY(0);
-  }
-  75% {
-    transform: rotate(3deg) translateY(-10px);
-  }
+  0%, 100% { transform: rotate(-6deg) translateY(0); }
+  25%      { transform: rotate(6deg) translateY(-6px); }
+  50%      { transform: rotate(-3deg) translateY(0); }
+  75%      { transform: rotate(3deg) translateY(-10px); }
 }
 
 .rainbow-text {
-  vertical-align: bottom; /* shift alignment upward */
-  transform-origin: bottom center; /* wobble from the bottom edge */
-  font-size: 2.75rem; /* text-6xl */
-  font-weight: 800;   /* font-extrabold */
+  vertical-align: bottom;          /* align baseline visually */
+  transform-origin: bottom center; /* wobble pivot */
+  font-size: 2.75rem;              /* text-6xl */
+  font-weight: 800;                /* font-extrabold */
   display: inline-block;
   background: linear-gradient(
     270deg,
@@ -89,11 +125,7 @@ html {
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
-  animation: rainbow-scroll 3s linear infinite alternate,
-             wobble 1.5s ease-in-out infinite;
+  animation:
+    rainbow-scroll 3s linear infinite alternate,
+    wobble 1.5s ease-in-out infinite;
 }
-
-
-
-
-
