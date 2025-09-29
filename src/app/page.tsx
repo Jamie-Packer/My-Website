@@ -54,7 +54,7 @@ const HomePage = () => {
           <div className="flex flex-col md:flex-row items-center md:space-x-12">
             <div className="md:w-1-2 mb-8 md:mb-0">
               <h2 className="font-heading text-3xl font-bold mb-6">About Me</h2>
-              <p className="text-foreground2 mb-8">
+              <p className="text-foreground2 mb-8 text-lg">
                 I'm passionate about leveraging data to solve real problems and create meaningful insights. My skills in Python, machine learning, and data visualization are the foundation of my work. This website serves as a portfolio to showcase my projects and share my findings. :)
               </p>
               <div className="flex space-x-8">
