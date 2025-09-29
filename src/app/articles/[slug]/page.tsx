@@ -3,6 +3,7 @@ import { MDXRemote } from 'next-mdx-remote/rsc';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import YouTubeEmbed from '@/components/YouTubeEmbed';
+import TagList from "@/components/TagList";
 import { notFound } from 'next/navigation';
 
 export async function generateStaticParams() {
@@ -23,6 +24,7 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
 
   const components = {
     YouTubeEmbed,
+    TagList,
   };
 
   return (
