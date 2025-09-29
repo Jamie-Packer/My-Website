@@ -6,6 +6,7 @@ import Image from 'next/image';
 import ExternalLinkIcon from '@/components/icons/ExternalLinkIcon';
 import GitHubIcon from '@/components/icons/GitHubIcon';
 import { notFound } from 'next/navigation';
+import TableOfContents from '@/components/TableOfContents';
 
 export async function generateStaticParams() {
   const projects = await getSortedContentData<ProjectMetadata>('projects');
@@ -65,6 +66,11 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
               height={675}
               className="rounded-lg border border-foreground/10 w-full"
             />
+          </div>
+
+          {/* TOC added here, using the rendered MDX container as the source */}
+          <div className="mb-8">
+            <TableOfContents containerSelector=".prose" defaultCollapsed />
           </div>
 
           <div className="prose prose-lg prose-invert max-w-none">

@@ -42,15 +42,6 @@ html {
 }
 
 
-
-
-
-
-
-
-
-
-
 /* Custom Animations */
 
 @keyframes rainbow-scroll {
@@ -98,7 +89,6 @@ html {
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
-  text-fill-color: transparent;
   animation: rainbow-scroll 3s linear infinite alternate,
              wobble 1.5s ease-in-out infinite;
 }
