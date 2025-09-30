@@ -9,7 +9,7 @@ tags: ["Data Science", "AI", "Machine Learning", "Deep Learning", "Statistics", 
  # Introduction
 
 In this write-up I have put together a **selection of coursework from the relevant modules** in my second and third years of university.
-This isn't all the project work I did at university, just an overview of the relevant project-type work.
+This isn't all the project work I did at university, nor is it a complete write-up of each one, just an overview of the relevant project-type work.
 
 The featured work is broken the work down by year and by module, each with atleast a description of what was involved. I have omitted first year modules since they're elementary and also heavily statistical modules since their coursework was not so relevant to data science.
 
@@ -78,6 +78,7 @@ If you want to find out more of what was involved in these modules, you can foun
   "Linear Regression",
   "Pandas",
   "Matplotlib",
+  "Sci-Kit Learn",
   "Seaborn",
   "Plotly",
   "Jupyter"
@@ -165,6 +166,28 @@ Given the extra setup and higher credit spend, I favoured the pre-trained baseli
 
 ---
 
+### Machine Learning and AI — Bayesian Neural Networks for Flood Hazard Prediction
+
+<TagList items={[
+  "Machine Learning",
+  "Deep Learning",
+  "Bayesian Neural Networks",
+  "Variational Approximation",
+  "MCMC",
+  "PyTorch",
+  "Pyro",
+  "Python"
+]} />
+
+This coursework compared **Variational Approximation (VA)** and **Markov Chain Monte Carlo (MCMC)** for **Bayesian Neural Networks (BNNs)** on a flood hazard dataset of ~67k samples, where only ~7% were labelled hazardous.
+
+The data was cleaned, standardised, one-hot encoded, and models were trained with class weights to address imbalance. A small feed-forward BNN with two hidden layers and Normal priors was implemented in **PyTorch/Pyro** to keep the setup consistent across both methods.
+
+The **VA model** collapsed to predicting only the majority class, while the **MCMC model** converged and achieved a modest **F1 ≈ 0.57** at heavy computational cost. The limited results likely reflected both the difficulty of the imbalanced dataset and the simplicity of the chosen architecture, highlighting the practical challenges of applying Bayesian inference in this setting.
+
+
+---
+
 ### Learning from Data — Sentiment Classification on Steam Reviews
 
 <TagList items={[
@@ -177,23 +200,19 @@ Given the extra setup and higher credit spend, I favoured the pre-trained baseli
   "Support Vector Machine",
   "Random Forest",
   "XGBoost",
+  "Sci-Kit Learn",
   "Python"
 ]} />
 
 I carried out a self-directed sentiment **classification** project on Steam game reviews using **Python** and standard machine learning libraries. The task was to take raw, informal text and predict review polarity with a straightforward, reproducible setup.
-This module was designed as an entry-level introduction for MSc students and final year computer science undergraduates, so the assignment was relatively simple.
+This module was designed as an introduction for MSc Data Science students and final year computer science undergraduates, so the assignment was relatively simple.
 
 The experiment involved text cleaning (normalisation, tokenisation, lemmatisation), feature extraction with **TF-IDF** and **Word2Vec**, and training models including **Logistic Regression**, **Linear SVM**, **Random Forest**, and **XGBoost**. Models were trained on a train/test split with **class weighting** applied for imbalance, and evaluated with **precision**, **recall**, **F1-score**, and accuracy.
 The work could have been improved with a validation split, though the aim was mainly to apply standard NLP techniques.
 
 
+
 --- 
-## Second Year
+## Second Year [WIP]
 
-### [Module Name Here]
-
-Placeholder.
-
-### [Module Name Here]
-
-Placeholder.
+### To be continued...
