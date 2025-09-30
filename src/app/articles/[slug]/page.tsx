@@ -5,6 +5,7 @@ import Footer from '@/components/Footer';
 import YouTubeEmbed from '@/components/YouTubeEmbed';
 import TagList from "@/components/TagList";
 import { notFound } from 'next/navigation';
+import FigureImage from '@/components/FigureImage';
 
 export async function generateStaticParams() {
   const articles = await getSortedContentData<ArticleMetadata>('articles');
@@ -25,6 +26,7 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
   const components = {
     YouTubeEmbed,
     TagList,
+    FigureImage,
   };
 
   return (

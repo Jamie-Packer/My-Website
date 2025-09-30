@@ -8,6 +8,7 @@ import ExternalLinkIcon from '@/components/icons/ExternalLinkIcon';
 import GitHubIcon from '@/components/icons/GitHubIcon';
 import { notFound } from 'next/navigation';
 import TableOfContents from '@/components/TableOfContents';
+import FigureImage from '@/components/FigureImage'; 
 
 // Make these available inside MDX:
 import TagList from '@/components/TagList';
@@ -32,6 +33,7 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
   const components = {
     TagList,
     YouTubeEmbed,
+    FigureImage,
   };
 
   return (

@@ -2,8 +2,8 @@
 published: true
 title: "What I did at University"
 description: "An overview of the most relevant university projects/coursework from my Data Science BSc at the University of Exeter."
-imageUrl: "/images/projects/university.png"
-tags: ["Data Science", "AI", "Machine Learning", "Python", "SQL", "Java", "Database Theory", "Data Visualisation"]
+imageUrl: "/images/projects/university/university.png"
+tags: ["Data Science", "AI", "Machine Learning", "Deep Learning", "Statistics", "GCP", "Python", "R", "SQL", "Java", "Database Theory", "Data Visualisation", "Data Preprocessing", "Numpy", "Pandas"]
 ---
 
  # Introduction
@@ -87,9 +87,9 @@ If you want to find out more of what was involved in these modules, you can foun
 For my final-year project (equivalent of a dissertation) I tackled a problem in a space I’m genuinely passionate about: using data science to understand professional Counter-Strike (the videogame). The project set out to measure the link between playstyles (how a player plays the game) and roles (the responsibilities they are expected to fulfil in a team).
 
 #### TL;DR
-The analysis showed that **data-driven playstyle profiles meaningfully align with expert role labels** while also revealing fluidity and overlap in how roles manifest. To achieve this, I designed a bespoke workflow to process ~400GB of raw match data, engineered **custom features**, and applied a mix of **EDA**, **linear regression**, **logistic regression/random forest**, and multiple **clustering methods** with quality metrics (**Silhouette, Calinski–Harabasz, NMI, ARI**).
-
-**Tags:** Machine Learning · Python · Data Visualisation · Feature Engineering · SQL
+The analysis showed that **data-driven playstyle profiles meaningfully align with expert role labels** while also revealing fluidity and overlap in how roles manifest.
+To achieve this, I designed a bespoke workflow to process ~400GB of raw match data, engineered **custom features**, and applied a mix of **EDA**,
+**linear regression analysis**, **basic classification**, and multiple **clustering methods** analysing their quality metrics (**Silhouette, Calinski–Harabasz, NMI, ARI**).
 
 
 <details>
@@ -103,16 +103,11 @@ The analysis showed that **data-driven playstyle profiles meaningfully align wit
   - Trading (proportion of kills and deaths traded)  
   - Positioning (two novel distance-based metrics I developed to capture how close players stayed to their teammates)
 
-  <figure className="my-6">
-    <img 
-      src="/images/projects/feature_extraction.svg" 
-      alt="Data Processing Diagram" 
-      className="mx-auto rounded-lg shadow-lg"
-    />
-    <figcaption className="text-sm text-foreground2 mt-2 text-center">
-      Diagram showing the data processing workflow.
-    </figcaption>
-  </figure>
+  <FigureImage
+  src="/images/projects/university/feature_extraction.svg"
+  alt="Data Processing Diagram"
+  caption="Diagram showing the data processing workflow."
+  />
 
   All processing was done locally in python, with careful validation (manual demo checks and cross-referencing HLTV stats) to ensure the features were robust. The result was a clean player-level dataset representing playstyle alone.
 
@@ -122,16 +117,13 @@ The analysis showed that **data-driven playstyle profiles meaningfully align wit
 
   I then moved on to several **clustering methods** (**K-Means**, **Hierarchical**, **Gaussian Mixture Models**) to see if natural “archetypes” emerged. Cluster quality was assessed using internal validation metrics such as the **Silhouette Coefficient** and **Calinski–Harabasz Index**, while external comparison with expert-assigned role labels was quantified using **Normalized Mutual Information (NMI)** and the **Adjusted Rand Index (ARI)**. Together, these steps created a rigorous analytical framework that contextualised the clustering results and highlighted both the structure and limitations of the data.
 
-  <figure className="my-6">
-    <img 
-      src="/images/projects/CS_T_Features_PCA.svg" 
-      alt="PCA of T-side features" 
-      className="mx-auto rounded-lg shadow-lg"
-    />
-    <figcaption className="text-sm text-foreground2 mt-2 text-center">
-      PCA projection of the T-side player features, with roles colour-labelled.
-    </figcaption>
-  </figure>
+
+  <FigureImage
+  src="/images/projects/university/CS_T_Features_PCA.svg"
+  alt="PCA of T-side features"
+  caption="PCA projection of the T-side player features, with roles colour-labelled."
+  />
+
 
   #### Interpretations
 
