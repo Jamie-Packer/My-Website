@@ -1,3 +1,4 @@
+// src/app/projects/[slug]/page.tsx
 import { getSortedContentData, getContentBySlug, ProjectMetadata } from '@/lib/content';
 import { MDXRemote } from 'next-mdx-remote/rsc';
 import Navbar from '@/components/Navbar';
@@ -7,6 +8,11 @@ import ExternalLinkIcon from '@/components/icons/ExternalLinkIcon';
 import GitHubIcon from '@/components/icons/GitHubIcon';
 import { notFound } from 'next/navigation';
 import TableOfContents from '@/components/TableOfContents';
+import FigureImage from '@/components/FigureImage'; 
+
+// Make these available inside MDX:
+import TagList from '@/components/TagList';
+import YouTubeEmbed from '@/components/YouTubeEmbed';
 
 export async function generateStaticParams() {
   const projects = await getSortedContentData<ProjectMetadata>('projects');
@@ -24,6 +30,12 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
   const { metadata, content } = entry;
   const projectMetadata = metadata as ProjectMetadata;
 
+  const components = {
+    TagList,
+    YouTubeEmbed,
+    FigureImage,
+  };
+
   return (
     <main>
       <Navbar />
@@ -32,7 +44,11 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
           <div className="mb-12">
             <h1 className="font-heading text-5xl font-bold mb-2">{projectMetadata.title}</h1>
             <p className="text-foreground2 text-xl mb-6">{projectMetadata.description}</p>
-            <div className="flex flex-wrap gap-6 items-center">
+            {projectMetadata.tags?.length ? (
+              <TagList items={projectMetadata.tags} />
+            ) : null}
+
+            <div className="flex flex-wrap gap-6 items-center mt-6">
               {projectMetadata.liveUrl && (
                 <a
                   href={projectMetadata.liveUrl}
@@ -65,16 +81,17 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
               width={1200}
               height={675}
               className="rounded-lg border border-foreground/10 w-full"
+              priority
             />
           </div>
 
-          {/* TOC added here, using the rendered MDX container as the source */}
+          {/* TOC */}
           <div className="mb-8">
             <TableOfContents containerSelector=".prose" defaultCollapsed />
           </div>
 
           <div className="prose prose-lg prose-invert max-w-none">
-            <MDXRemote source={content} />
+            <MDXRemote source={content} components={components} />
           </div>
         </article>
       </div>

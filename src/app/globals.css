@@ -37,6 +37,12 @@ html {
   scroll-behavior: smooth;
 }
 
+/* Apply heading font to all heading tags globally */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-heading);
+}
+
+
 /* Tailwind Typography → map to theme tokens for MDX (.prose) */
 .prose {
   /* Body copy uses secondary text; headings use primary text */

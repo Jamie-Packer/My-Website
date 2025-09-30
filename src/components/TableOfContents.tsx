@@ -140,7 +140,7 @@ export default function TableOfContents({
                   href={`#${n.id}`}
                   onClick={handleClick(n.id)}
                   className={[
-                    "block rounded-xl px-2 py-1 text-sm transition",
+                    "block rounded-xl px-2 py-1 text-large transition",
                     depth === 0 ? "font-medium" : "opacity-90",
                     isActive ? "bg-foreground/10" : "hover:bg-foreground/5",
                     "text-foreground",
@@ -178,7 +178,7 @@ export default function TableOfContents({
         aria-controls="toc-list"
         className="flex w-full items-center justify-between gap-2 rounded-xl px-2 py-2 text-left hover:bg-foreground/5"
       >
-        <span className="text-sm font-heading uppercase tracking-wide text-foreground">
+        <span className="text-xl font-heading uppercase tracking-wide text-foreground">
           {title}
         </span>
 

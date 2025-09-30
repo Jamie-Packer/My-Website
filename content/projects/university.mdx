@@ -1,0 +1,218 @@
+---
+published: true
+title: "University Projects"
+description: "An overview of the most relevant university projects/coursework from my Data Science BSc at the University of Exeter."
+imageUrl: "/images/projects/university/university.png"
+tags: ["Data Science", "AI", "Machine Learning", "Deep Learning", "Statistics", "GCP", "Python", "R", "SQL", "Java", "Database Theory", "Data Visualisation", "Data Preprocessing", "Numpy", "Pandas"]
+---
+
+ # Introduction
+
+In this write-up I have put together a **selection of coursework from the relevant modules** in my second and third years of university.
+This isn't all the project work I did at university, nor is it a complete write-up of each one, just an overview of the relevant project-type work.
+
+The featured work is broken the work down by year and by module, each with atleast a description of what was involved. I have omitted first year modules since they're elementary and also heavily statistical modules since their coursework was not so relevant to data science.
+
+---
+
+## Modules Taken
+Here is a list of all the modules I took at University.
+If you want to find out more of what was involved in these modules, you can found out more here:
+<a href="https://www.exeter.ac.uk/study/studyinformation/modules/?prog=mathematics&year=2022/3" target="_blank" rel="noopener noreferrer">Mathematics/Statistics</a> | 
+<a href="https://www.exeter.ac.uk/study/studyinformation/modules/?prog=compsci&year=2022/3" target="_blank" rel="noopener noreferrer">Data/Computer Science</a>.
+
+
+<details>
+  <summary className="cursor-pointer text-2xl font-heading">Third Year</summary>
+  <ul className="mt-2 space-y-1">
+    <li>COM3022 — Data Science Individual Project</li>
+    <li>COM3021 — Data Science at Scale</li>
+    <li>COM3023 — Machine Learning and AI</li>
+    <li>ECM3420 — Learning from Data</li>
+    <li>MTH3024 — Stochastic Processes</li>
+    <li>MTH3028 — Statistical Inference</li>
+    <li>MTH3041 — Bayesian Statistics, Philosophy and Practice</li>
+  </ul>
+</details>
+
+<details>
+  <summary className="cursor-pointer text-2xl font-heading">Second Year</summary>
+  <ul className="mt-2 space-y-1">
+    <li>COM2011 — Machine Learning and Data Science</li>
+    <li>COM2012 — Data Science in Society</li>
+    <li>COM2013 — Data Science Group Project 2</li>
+    <li>COM2014 — Computational Intelligence</li>
+    <li>ECM2414 — Software Development</li>
+    <li>ECM2419 — Database Theory and Design</li>
+    <li>MTH2006 — Statistical Modelling and Inference</li>
+  </ul>
+</details>
+
+<details>
+  <summary className="cursor-pointer text-2xl font-heading">First Year</summary>
+  <ul className="mt-2 space-y-1">
+    <li>COM1012 — Data Science Group Project 1</li>
+    <li>ECM1410 — Object-Oriented Programming</li>
+    <li>MTH1002 — Mathematical Methods</li>
+    <li>MTH1004 — Probability, Statistics and Data</li>
+    <li>COM1011 — Fundamentals of Machine Learning</li>
+    <li>ECM1400 — Programming</li>
+  </ul>
+</details>
+
+---
+## Third Year
+---
+
+### Data Science Individual Project — Analysing Playstyle in Counter-Strike
+
+<TagList items={[
+  "Python",
+  "Machine Learning",
+  "Feature Engineering",
+  "Clustering",
+  "Data Visualisation",
+  "Exploratory Data Analysis",
+  "Logistic Regression",
+  "Random Forest",
+  "Linear Regression",
+  "Pandas",
+  "Matplotlib",
+  "Sci-Kit Learn",
+  "Seaborn",
+  "Plotly",
+  "Jupyter"
+]} />
+
+
+For my final-year project (equivalent of a dissertation) I tackled a problem in a space I’m genuinely passionate about: using data science to understand professional Counter-Strike (the videogame). The project set out to measure the link between playstyles (how a player plays the game) and roles (the responsibilities they are expected to fulfil in a team).
+
+#### TL;DR
+The analysis showed that **data-driven playstyle profiles meaningfully align with expert role labels** while also revealing fluidity and overlap in how roles manifest.
+To achieve this, I designed a bespoke workflow to process ~400GB of raw match data, engineered **custom features**, and applied a mix of **EDA**,
+**linear regression analysis**, **basic classification**, and multiple **clustering methods** analysing their quality metrics (**Silhouette, Calinski–Harabasz, NMI, ARI**).
+
+
+<details>
+  <summary className="cursor-pointer text-3xl font-heading">Read full details</summary>
+
+  #### Data Processing
+
+  To do this, I built a bespoke data processing workflow. Starting with over 400GB of raw "demofiles" (gameplay data) from tournaments in 2024, I used the <a href="https://github.com/pnxenopoulos/awpy" target="_blank" rel="noopener noreferrer">awpy</a> python library to parse the game events and then engineered a bespoke set of behavioural features. These weren’t performance metrics like K/D — they were designed to quantify *how* a player approached the game, not *how well*:
+
+  - Aggression (time alive per death, opening duel attempts)  
+  - Trading (proportion of kills and deaths traded)  
+  - Positioning (two novel distance-based metrics I developed to capture how close players stayed to their teammates)
+
+  <FigureImage
+  src="/images/projects/university/feature_extraction.svg"
+  alt="Data Processing Diagram"
+  caption="Diagram showing the data processing workflow."
+  />
+
+  All processing was done locally in python, with careful validation (manual demo checks and cross-referencing HLTV stats) to ensure the features were robust. The result was a clean player-level dataset representing playstyle alone.
+
+  #### Data analysis methodology
+
+  I carried out extensive exploratory analysis on the engineered features. This included stability checks to ensure they were consistent across sufficient samples, **correlation analysis** to study relationships between them, and analysed a **linear regression stratified by role** on the positional metrics to determine whether both captured distinct information. I also ran preliminary classification experiments with **Logistic Regression** and **Random Forests** to test how well the features could predict role labels. Throughout this process I generated a large number of plots — distributions, correlations, regressions, and role comparisons — to visualise and validate the behaviour of the features.
+
+  I then moved on to several **clustering methods** (**K-Means**, **Hierarchical**, **Gaussian Mixture Models**) to see if natural “archetypes” emerged. Cluster quality was assessed using internal validation metrics such as the **Silhouette Coefficient** and **Calinski–Harabasz Index**, while external comparison with expert-assigned role labels was quantified using **Normalized Mutual Information (NMI)** and the **Adjusted Rand Index (ARI)**. Together, these steps created a rigorous analytical framework that contextualised the clustering results and highlighted both the structure and limitations of the data.
+
+  <FigureImage
+  src="/images/projects/university/CS_T_Features_PCA.svg"
+  alt="PCA of T-side features"
+  caption="PCA projection of the T-side player features, with roles colour-labelled."
+  />
+
+
+  #### Interpretations
+
+  The analysis showed clear spectra for rifler roles, distinct separation of snipers (AWPers), and measurable though overlapping groupings that aligned with expert role labels from the CS community. **In short, I was able to demonstrate that with just a few carefully engineered features, data-driven playstyle profiles corresponded with how analysts describe roles**, while also highlighting ambiguities and role fluidity. **T-side roles proved more distinguishable than the CT-side**, where playstyles were less separable and clusters weaker — a finding that mirrors the greater individual flexibility demanded on the defensive side. Notably, **T-side AWPers consistently formed the most distinct cluster**, showing that their behavioural signature was strong enough to emerge from positioning and engagement patterns alone. Meanwhile, rifler roles often appeared along spectra (e.g. Spacetaker ↔ Lurker, Anchor ↔ Rotator) rather than as discrete groups, reinforcing that **playstyles exist on a continuum rather than in fixed categories**.
+
+  #### Conclusion
+
+  This project gave me experience with a full data workflow — messy raw data acquisition, custom feature engineering, validation, clustering, and analysis — and produced a unique dataset and methodology in a field that hasn’t seen much academic work yet. It was the most meaningful piece of coursework I did, combining technical depth with a domain I have relative expertise in.
+
+</details>
+
+---
+
+### Data Science at Scale — Vertex AI Workflow on Fashion-MNIST
+
+<TagList items={[
+  "Google Cloud",
+  "Vertex AI",
+  "Cloud Storage",
+  "TensorFlow",
+  "Python",
+  "Neural Networks",
+  "Machine Learning",
+  "Model Deployment",
+  "Deep Learning",
+  "Data Visualisation"
+]} />
+
+This coursework used **Fashion-MNIST** to build a cloud-backed **image classification** pipeline and compare a deployed model with a locally loaded baseline and a small model I trained myself.
+
+<FigureImage
+  src="/images/projects/university/DSS.svg"
+  alt="Google Cloud Icons and some images from the dataset"
+  />
+
+I uploaded the provided artefacts to **Cloud Storage**, registered a pre-trained model in **Vertex AI**, and deployed it to an endpoint. From a **Vertex AI Workbench** notebook, I wrote **Python** to preprocess test images, call the endpoint, and record metrics — **precision**, **recall**, **F1-score**, and accuracy. I then loaded the second pre-trained model locally with **TensorFlow/Keras** and ran the same evaluation for a like-for-like comparison; both pre-trained paths delivered similar results (weighted **F1 ≈ 0.88**).
+
+To extend the work, I trained a compact **convolutional neural network** and exported it for reuse. The custom model reached a weighted **F1 ≈ 0.89**, a **negligible** lift over the baselines.
+Given the extra setup and higher credit spend, I favoured the pre-trained baseline for **price–performance**, and would only deploy to a Vertex AI endpoint when a managed, real-time API is required.
+
+---
+
+### Machine Learning and AI — Bayesian Neural Networks for Flood Hazard Prediction
+
+<TagList items={[
+  "Machine Learning",
+  "Deep Learning",
+  "Bayesian Neural Networks",
+  "Variational Approximation",
+  "MCMC",
+  "PyTorch",
+  "Pyro",
+  "Python"
+]} />
+
+This coursework compared **Variational Approximation (VA)** and **Markov Chain Monte Carlo (MCMC)** for **Bayesian Neural Networks (BNNs)** on a flood hazard dataset of ~67k samples, where only ~7% were labelled hazardous.
+
+The data was cleaned, standardised, one-hot encoded, and models were trained with class weights to address imbalance. A small feed-forward BNN with two hidden layers and Normal priors was implemented in **PyTorch/Pyro** to keep the setup consistent across both methods.
+
+The **VA model** collapsed to predicting only the majority class, while the **MCMC model** converged and achieved a modest **F1 ≈ 0.57** at heavy computational cost. The limited results likely reflected both the difficulty of the imbalanced dataset and the simplicity of the chosen architecture, highlighting the practical challenges of applying Bayesian inference in this setting.
+
+
+---
+
+### Learning from Data — Sentiment Classification on Steam Reviews
+
+<TagList items={[
+  "Machine Learning",
+  "Natural Language Processing",
+  "Text Classification",
+  "TF-IDF",
+  "Word2Vec",
+  "Logistic Regression",
+  "Support Vector Machine",
+  "Random Forest",
+  "XGBoost",
+  "Sci-Kit Learn",
+  "Python"
+]} />
+
+I carried out a self-directed sentiment **classification** project on Steam game reviews using **Python** and standard machine learning libraries. The task was to take raw, informal text and predict review polarity with a straightforward, reproducible setup.
+This module was designed as an introduction for MSc Data Science students and final year computer science undergraduates, so the assignment was relatively simple.
+
+The experiment involved text cleaning (normalisation, tokenisation, lemmatisation), feature extraction with **TF-IDF** and **Word2Vec**, and training models including **Logistic Regression**, **Linear SVM**, **Random Forest**, and **XGBoost**. Models were trained on a train/test split with **class weighting** applied for imbalance, and evaluated with **precision**, **recall**, **F1-score**, and accuracy.
+The work could have been improved with a validation split, though the aim was mainly to apply standard NLP techniques.
+
+
+
+--- 
+## Second Year [WIP]
+
+### To be continued...
