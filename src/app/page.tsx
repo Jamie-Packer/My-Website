@@ -55,7 +55,7 @@ const HomePage = () => {
             <div className="md:w-1-2 mb-8 md:mb-0">
               <h2 className="font-heading text-3xl font-bold mb-6">About Me</h2>
               <p className="text-foreground2 mb-8 text-lg">
-                I'm passionate about leveraging data to solve real problems and create meaningful insights. My skills in Python, machine learning, and data visualization are the foundation of my work. This website serves as a portfolio to showcase my projects and share my findings. :)
+                I enjoy working with data to answer interesting questions and make cool models. My projects typically involve Python, machine learning, and statistical analysis. This site contains some links and information on what i've been up to. Have a look around! :)
               </p>
               <div className="flex space-x-8">
                 <a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ" target="_blank" rel="noopener noreferrer" className="text-foreground hover:text-accent transition-colors duration-200" aria-label="Email Me">
@@ -71,7 +71,7 @@ const HomePage = () => {
             </div>
             <div className="md:w-1/2 flex flex-col space-y-4">
               <a
-                href="/placeholder_cv.pdf"
+                href="/Jamie_Packer_CV.pdf"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="bg-accent hover:brightness-150 text-foreground font-bold py-3 px-6 rounded-md transition-colors duration-200 text-center flex-1"
