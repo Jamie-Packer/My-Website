@@ -16,18 +16,8 @@ And I assume that for most people this desire is satisfied by a social media pro
 But I think "social" media SUCKS, so my presence (if at all) on those platforms I keep limited. 
 
 Which is why I built this website. It's mine, it’s fully <span className="rainbow-text">customisable</span>,
-and it’s free from the brain-rot **SLOP** that you get on *every* social media platform. 
+and it’s free from the brain-rot that you get on social media platforms. 
 Here people can find some information about me, see what I've been up to via my projects and articles, and get in contact with me.
-
----
-<h2 id="stack" className="font-heading">The Stack</h2>
-
-- **Next.js**: The core framework for its routing and server-side rendering capabilities.
-- **TypeScript**: Used throughout the codebase to ensure type safety and improve code quality.
-- **React**: The library that powers all the user interface components.
-- **Tailwind CSS**: The styling framework used for its utility-first approach, which allows for rapid, consistent UI development.
-- **Vercel**: The platform used for deployment and hosting, providing a smooth path from development to production.
-
 
 ---
 <h2 id="dev" className="font-heading">Development</h2>
@@ -39,11 +29,14 @@ When it comes to making a website, there are roughly three options:
 
 I created this website just after finishing university, so as you might guess, being broke and with time on my hands, I decided to build it myself.
 As my speciality is data science, not web development, the extent of my web-dev knowledge before this project was my base of programming knowledge + 
-a small amount I learnt about the internet and HTML in school/college. Everything else I taught myself. 
+a small amount I learnt about the internet and HTML in school/college. Everything else I taught myself.
 
 It took a little over a week to get from my starting point, to a fully working live website ready to fill with content.
 To organise the project, I used a general project lifecycle approach, split into three distinct phases.
 
+
+<details>
+<summary className="cursor-pointer font-heading text-xl mb-4">More Details (Click to expand)</summary>
 <h3 id="phase-1" className="font-heading">Phase I: Specification and Requirements</h3>
 
 Obviously I needed a vision for what the website would look like. This included the functionalities I wanted, my budget, and time constraints.
@@ -60,18 +53,18 @@ This involved learning about things such as the pros and cons of common tech sta
 <h4 id="conceptual" className="font-heading">How I did it conceptually:</h4>
 
 Since web development is a large field, **the most important thing that I did** during this research and planning **was managing complexity.** 
-On a psychological level, this is the secret sauce that I used to keep me motivated to work on the project. 
+On a psychological level, this is what kept me motivated to work on the project. 
 
-I found that the key skill to research like this is 
+I found that a key skill to research like this is 
 <a href="https://chatgpt.com/s/t_68d9443d28dc8191a4a056778a11bfba" target="_blank" rel="noopener noreferrer">metacognitive regulation</a>. 
-Specifically, I worked top-down, from the higher-level concepts downwards, marking rabbit holes which require further knowledge for the decision to proceed down or avoid. 
+Specifically, I worked top-down, from the higher-level concepts downwards, marking rabbit holes which require further knowledge. 
 This strategy generally, at any given time, kept my next steps *known* and within my 
 <a href="https://en.wikipedia.org/wiki/Zone_of_proximal_development" target="_blank" rel="noopener noreferrer">zone of proximal development</a>.
 
 
 <h4 id="practical" className="font-heading">How I did it practically:</h4>
 
-Since teaching quality at universities nowadays is... you know. I am very familiar with self-learning and researching.
+Since teaching quality at universities nowadays is... I am very familiar with self-learning and researching.
 Particularly regarding use of large language models (LLMs) for modern learning. Using careful context and prompt engineering I had my current daily LLM understand my requirements,
 figure out my current knowledge level, outline a learning plan and engage in ***active-recall*** **centered conversations** to build my knowledge fast and efficiently.
 This was also supplemented with youtube videos, which lead to feeding ideas into the conversations and so on. Dynamic, focused research.
@@ -81,20 +74,29 @@ This was also supplemented with youtube videos, which lead to feeding ideas into
 Once I started coding, I had a fully functional live site in four days. I began with the homepage, then implemented the content system for the articles and projects, tweaking styling continuously as I went. 
 
 The code itself was mostly *vibe-coded*, and at this moment in time the term "vibe-coded" can mean a variety of things so I will elaborate a bit on my process. 
-First, the LLM would be given very specific context files and instructions (more complex than it sounds). 
+First, the LLM would be given very specific context files and instructions. 
 Then individual portions of code would be generated, and chiseled down manually or by prompts into a working, tested state.
 
-When using LLMs to help code, I believe it **is absolutely necessary to understand exactly what your code does**, and the important parts of the syntax. 
+When using LLMs to help code, I believe it **is necessary to understand exactly what your code is doing**, and the important parts of the syntax. 
 This approach allows one to focus almost entirely on the logic, structure and purpose of the code, whilst abstracting away superfluous specifics. 
 Your brain quite literally only has so much RAM. This is how I implement generative AI in my data science work.
 
-However, since this project was not so critical, and I don't have a particular interest in going into web-dev, I’d call what I was doing *B-Grade vibe coding*: I understood everything at least at the block level — how components fit together, what each file was for, and the logic tying it all up — but I wasn’t memorising every detail of the syntax.
+However, since this project was not so critical, and I don't have a particular interest in going into web-dev, I relaxed this constraint a little: I understood everything at least at the block level — how components fit together, what each file was for, and the logic tying it all up, but I wasn’t memorising every detail.
 
 Whilst this approach did speed things up considerably overall, I was very quickly reminded why this can be a bad idea. At one point, the LLM I was using assumed the existence of a config file that had been required in older Tailwind versions but was no longer needed. That single wrong assumption wasted more time than it should have, but it was also a useful reminder about versioning and the importance of good context engineering. **In short, AI can accelerate the process, but you still have to keep it on a leash.** 
 
-Another, rather embarrassing, mistake I made early on was pushing big commits directly to main and just crossing my fingers that the deployment would work. Of course, it didn’t always. A few failed builds later I realised that proper branching with preview deployments is the way to go. It’s a very noobie error to make, but one that I’ve corrected and learnt from. 
+</details>
 
-Despite these mistakes, the website came together pretty quick. I learnt a great deal and now have my very own website exactly how I want it :)
+Despite a few hiccups, the website came together pretty quick. I learnt a great deal and now have my very own website exactly how I want it :)
+
+---
+<h2 id="stack" className="font-heading">The Stack</h2>
+
+- **Next.js**: The core framework for its routing and server-side rendering capabilities.
+- **TypeScript**: Used throughout the codebase to ensure type safety and improve code quality.
+- **React**: The library behind the user interface components.
+- **Tailwind CSS**: The styling framework.
+- **Vercel**: The platform used for deployment and hosting, providing a smooth path from development to production.
 
 
 ---
@@ -104,6 +106,6 @@ There can always be more things!
 
 Some of my plans for the future include:
 
-- **Adding more content**: The most important next step is to populate the site with more projects and articles!
-- **Implementing a contact form**: To make it easy for people to get in touch.
-- **Content database**: As the amount of content grows, I may explore migrating from local MDX files to an external database to improve content management and scalability.
+- **Adding more content**: The most important next step is to populate the site with more stuff!
+- **Contact form**: For people to get in touch (currently the email icon is a rick-roll).
+- **Content database**: As the amount of content grows, I may explore migrating from local MDX files to an external database to improve content management and scalability, or just for fun/practice.
