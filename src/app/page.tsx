@@ -17,7 +17,7 @@ const HomePage = () => {
         <div className="bg-background hidden md:block">
           <div
             className="h-full w-full bg-cover bg-center"
-            style={{ backgroundImage: "url('/placeholder_img.svg')" }}
+            style={{ backgroundImage: "url('/images/home/home_image.png')" }}
           >
           </div>
         </div>
