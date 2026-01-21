@@ -1,6 +1,4 @@
 // src/app/page.tsx
-import Navbar from '@/components/Navbar';
-import Footer from '@/components/Footer';
 import Link from 'next/link';
 import GitHubIcon from '@/components/icons/GitHubIcon';
 import LinkedInIcon from '@/components/icons/LinkedInIcon';
@@ -10,7 +8,6 @@ import EmailIcon from '@/components/icons/EmailIcon';
 const HomePage = () => {
   return (
     <main>
-      <Navbar />
 
       {/* Hero Section */}
       <section id="hero" className="grid grid-cols-1 md:grid-cols-2 min-h-screen">
@@ -94,7 +91,6 @@ const HomePage = () => {
           </div>
         </div>
       </section>
-      <Footer />
     </main>
   );
 };
