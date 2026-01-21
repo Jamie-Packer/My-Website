@@ -1,8 +1,6 @@
 // src/app/projects/[slug]/page.tsx
 import { getSortedContentData, getContentBySlug, ProjectMetadata } from '@/lib/content';
 import { MDXRemote } from 'next-mdx-remote/rsc';
-import Navbar from '@/components/Navbar';
-import Footer from '@/components/Footer';
 import Image from 'next/image';
 import ExternalLinkIcon from '@/components/icons/ExternalLinkIcon';
 import GitHubIcon from '@/components/icons/GitHubIcon';
@@ -38,7 +36,6 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
 
   return (
     <main>
-      <Navbar />
       <div className="container mx-auto px-4 py-16 md:py-24 max-w-4xl min-h-screen">
         <article>
           <div className="mb-12">
@@ -95,7 +92,6 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
           </div>
         </article>
       </div>
-      <Footer />
     </main>
   );
 }

@@ -1,7 +1,5 @@
 // src/app/projects/page.tsx
 
-import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
 import ProjectCard from "@/components/ProjectCard";
 import { getSortedContentData, ProjectMetadata } from "@/lib/content";
 
@@ -10,7 +8,6 @@ export default async function ProjectsPage() {
   
   return (
     <main>
-      <Navbar />
       <div className="container mx-auto px-4 py-16 md:py-24 min-h-screen">
         <h1 className="font-heading text-4xl font-bold mb-4">My Work</h1>
         <p className="text-foreground2 text-lg mb-12">
@@ -32,7 +29,6 @@ export default async function ProjectsPage() {
           ))}
         </div>
       </div>
-      <Footer />
     </main>
   );
 }
