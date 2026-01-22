@@ -1,5 +1,6 @@
 // src/app/page.tsx
 import Link from 'next/link';
+import Image from 'next/image';
 import GitHubIcon from '@/components/icons/GitHubIcon';
 import LinkedInIcon from '@/components/icons/LinkedInIcon';
 import EmailIcon from '@/components/icons/EmailIcon';
@@ -11,12 +12,14 @@ const HomePage = () => {
 
       {/* Hero Section */}
       <section id="hero" className="grid grid-cols-1 md:grid-cols-2 min-h-screen">
-        <div className="bg-background hidden md:block">
-          <div
-            className="h-full w-full bg-cover bg-center"
-            style={{ backgroundImage: "url('/images/home/home_image.png')" }}
-          >
-          </div>
+        <div className="bg-background hidden md:block relative">
+          <Image
+            src="/images/home/home_image.png"
+            alt="Hero Background"
+            fill
+            className="object-cover"
+            priority
+          />
         </div>
 
         <div className="flex flex-col justify-center items-center md:items-start text-center md:text-left p-8">
