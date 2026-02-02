@@ -11,6 +11,7 @@ import FigureImage from '@/components/FigureImage';
 // Make these available inside MDX:
 import TagList from '@/components/TagList';
 import YouTubeEmbed from '@/components/YouTubeEmbed';
+import MDXLink from '@/components/MDXLink';
 
 export async function generateStaticParams() {
   const projects = await getSortedContentData<ProjectMetadata>('projects');
@@ -29,6 +30,7 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
   const projectMetadata = metadata as ProjectMetadata;
 
   const components = {
+    a: MDXLink,
     TagList,
     YouTubeEmbed,
     FigureImage,
