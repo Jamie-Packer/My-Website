@@ -1,6 +1,11 @@
 import Link from 'next/link';
+import { AnchorHTMLAttributes } from 'react';
 
-export default function MDXLink({ href, children, ...props }: any) {
+interface MDXLinkProps extends AnchorHTMLAttributes<HTMLAnchorElement> {
+  href?: string;
+}
+
+export default function MDXLink({ href, children, ...props }: MDXLinkProps) {
   if (!href) return null;
   
   const isExternal = href.startsWith('http');
