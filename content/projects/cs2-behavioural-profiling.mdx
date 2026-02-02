@@ -1,0 +1,37 @@
+---
+title: "Behavioural Modelling & Classification in Counter-Strike"
+date: '2026-01-01'
+description: "A deep dive into professional Counter-Strike 2 player behaviour. Using a custom dataset to quantify abstract behavioural patterns and predict player 'roles' with Machine Learning."
+published: true
+repoUrl: "https://github.com/Jamie-Packer/cs2-playstyle-analysis-2024-public"
+imageUrl: "/images/projects/cs2-playstyle-2024/T_KDE_Sample.svg"
+tags: ["Data Analysis", "Machine Learning", "Feature Engineering", "Statistics", "Python", "Counter-Strike"]
+---
+
+# TL;DR
+
+**Project Goal:** To determine if player "roles" in Counter-Strike are measurable behavioural archetypes that can be classified using machine learning, rather than just theoretical concepts.
+
+**Key Outcomes:**
+*   **Data Processing & Feature Engineering:** Processed over 1,000 match replay files (>400GB) to engineer a robust dataset of behavioural features, representing aspects of 'playstyle' such as aggression, trading, and positioning.
+*   **Quantifying Behaviour:** Used statistical analysis to formally model behavioural differences across roles, providing empirical validation for domain intuition (e.g. verifying how specific roles differ in positioning) while uncovering novel insights.
+*   **Role Classification:** Developed a supervised learning model as a proof-of-concept for automating role labelling. Achieved **~0.92 (T-Side), ~0.76 (CT-Side) F1-Macro scores**, demonstrating that player roles are statistically distinct (T-side more so) and enabling the algorithmic identification of mislabelled data.
+
+**Potential Utility:** This framework offers a scalable method for automated role labelling, applicable when manual annotation is unfeasible, such as on commercial analytics platforms or for large datasets.
+
+# Introduction
+
+Counter-Strike has a [rich history](https://en.wikipedia.org/wiki/Counter-Strike_in_esports) of competition spanning over two decades; it functions both as a casual game and a high-stakes sport with a healthy professional circuit [**(exceeding $30 million in annual prize pools)**](https://escharts.com/games/csgo). 
+Each match of **Counter-Strike acts as a complex system**, with 5 players (agents) split onto two sides and constrained by a virtual arena. 
+Out of this system, player "roles" have emerged as optimal ways to play the game. Similar to positions in football, terms like "Lurker" and "Anchor" describe a player's *functional responsibility* within the team structure.
+
+One motivation for this project is that while these roles are widely discussed, they are determined largely by the "eye test" or community consensus. They do not appear on the scoreboard. Quantifying these behaviors allows us to add rigor to the ongoing discussion in the scene. For example, we can move from debating if a player is an "Entry-Fragger" to measuring exactly where they sit in on a statistical spectrum of aggression and why.
+
+Beyond the theory, automated classification holds **potential for significant commercial value**. Services like [Leetify](https://leetify.com/) or [Scope.gg](https://scope.gg/) rely on providing users with a sense of "Identity". A tool that can mathematically validate a user's playstyle and tell them "You play like an Anchor" or "You played like (Pro Player) that match" could be a powerful engagement driver.
+
+
+# The Data
+
+# Exploratory Analysis
+
+# Classifying Roles
