@@ -10,18 +10,20 @@ tags: ["Data Analysis", "Machine Learning", "Feature Engineering", "Statistics",
 
 # TL;DR
 
-**Project Goal:** To determine if player "roles" in Counter-Strike are measurable behavioural archetypes that can be classified using machine learning, rather than just theoretical concepts.
+> **Project Goal:** To determine if player "roles" in Counter-Strike are measurable behavioural archetypes that can be classified using machine learning, rather than just theoretical concepts.
 
 **Key Outcomes:**
 *   **Data Processing & Feature Engineering:** Processed over 1,000 match replay files (>400GB) to engineer a robust dataset of behavioural features, representing aspects of 'playstyle' such as aggression, trading, and positioning.
 *   **Quantifying Behaviour:** Used statistical analysis to formally model behavioural differences across roles, providing empirical validation for domain intuition (e.g. verifying how specific roles differ in positioning) while uncovering novel insights.
 *   **Role Classification:** Developed a supervised learning model as a proof-of-concept for automating role labelling. Achieved **~0.92 (T-Side), ~0.76 (CT-Side) F1-Macro scores**, demonstrating that player roles are statistically distinct (T-side more so) and enabling the algorithmic identification of mislabelled data.
 
-**Potential Utility:** This framework offers a scalable method for automated role labelling, applicable when manual annotation is unfeasible, such as on commercial analytics platforms or for large datasets.
+> **Potential Utility:** This framework offers a scalable method for automated role labelling, applicable when manual annotation is unfeasible, such as on commercial analytics platforms or for large datasets.
 
-# Introduction
+---
 
-Counter-Strike has a [rich history](https://en.wikipedia.org/wiki/Counter-Strike_in_esports) of competition spanning over two decades; it functions both as a casual game and a high-stakes sport with a healthy professional circuit [**(exceeding $30 million in annual prize pools)**](https://escharts.com/games/csgo). 
+## Introduction
+
+Counter-Strike (CS) has a [rich history](https://en.wikipedia.org/wiki/Counter-Strike_in_esports) of competition spanning over two decades; it functions both as a casual game and a high-stakes sport with a healthy professional circuit [**(exceeding $30 million in annual prize pools)**](https://escharts.com/games/csgo). 
 Each match of **Counter-Strike acts as a complex system**, with 5 players (agents) split onto two sides and constrained by a virtual arena. 
 Out of this system, player "roles" have emerged as optimal ways to play the game. Similar to positions in football, terms like "Lurker" and "Anchor" describe a player's *functional responsibility* within the team structure.
 
@@ -29,8 +31,64 @@ One motivation for this project is that while these roles are widely discussed, 
 
 Beyond the theory, automated classification holds **potential for significant commercial value**. Services like [Leetify](https://leetify.com/) or [Scope.gg](https://scope.gg/) rely on providing users with a sense of "Identity". A tool that can mathematically validate a user's playstyle and tell them "You play like an Anchor" or "You played like (Pro Player) that match" could be a powerful engagement driver.
 
+---
 
-# The Data
+## The Data
+
+### Source & Scale
+The dataset for this project was constructed from scratch using raw match replay files (.dem) from the 2024 competitive season.
+To ensure high-quality "labels" for the roles, the data was restricted to **Tier 1 Events** (Majors and International LANs with >$250k prize pools), filtering out lower-tier matches where roles may not be recorded by [my source](#the-target-labels) or may be less structured than in more developed teams.
+
+*   **Total Demos Processed:** ~1,150 Maps
+*   **Total Raw Size:** >416 GB
+*   **Parsing Tool:** [`awpy`](https://github.com/pnxenopoulos/awpy) (Python)
+
+Parsing binary protobuf files at this scale presented significant engineering challenges, including handling corrupted demos, technical pauses, and the sheer computational cost of processing hundreds of gigabytes of unstructured event data into usable pandas DataFrames.
+
+<FigureImage
+  src="/images/projects/university/feature_extraction.svg"
+  alt="Data Processing Diagram"
+  caption="The data processing pipeline: from raw .dem files to an aggregated player-feature matrix."
+  width={725}
+  height={271}
+/>
+
+### Feature Engineering: Behaviour over Outcome
+The core philosophy of this feature set was to quantify **style**, not **skill**.
+Most available statistics (K/D ratio, ADR, Win %) measure *performance*. I deliberately excluded these to ensure that a "good" Anchor and a "bad" Anchor would still be grouped together based on *how* they played, rather than their success.
+
+> **Constraint:** I explicitly excluded the potential feature "% of kills with sniper rifles".
+> While this would have made classification trivial (AWPers (snipers) use AWPs), it would have masked the underlying behavioural patterns. I wanted to see if the model could identify an AWPer purely by *how they behave*, not just by the gun they hold.
+
+I engineered three categories of behavioural features:
+
+**Aggression:**
+    *   `TAPD` (Time Alive Per Death): Do they die early or survive late?
+    *   `OAP` (Opening Attempt %): How often do they take the first duel of the round?
+
+**Teamwork (Trading):**
+    *   `PODT` (Proportion of Deaths Traded): When they die, is a teammate close enough to avenge them?
+    *   `POKT` (Proportion of Kills which were Trades): Are they the ones doing the avenging?
+
+**Positioning (Novel Metrics):**
+    *   `ADNT` (Avg Distance to Nearest Teammate): Are they a "pack" player or a lone wolf?
+    *   `ADAT` (Avg Distance to Avg Teammate): Do they play central or peripheral angles?
+
+#### Normalising Geometry: The 0.2–1.0 Scale
+One major challenge with positional data is that maps have different sizes and geometries (e.g., Nuke has more verticality, Overpass is large). A distance of 100 units can mean something different on each map.
+
+To solve this, I implemented a **Team-Relative Rank** system. For every sampled tick, players were ranked 1–5 based on their distance from teammates, then normalised to a 0.2–1.0 scale.
+*   The scale ranges from **(closest) 0.2 {"<->"} 1.0 (farthest)**.
+
+This normalisation allows one to compare the positional style of players, despite differences in which maps their teams tend to play (decided by a veto process).
+
+### The Target Labels
+To supervise the analysis, I used expert role labels from **Harry Richards** (HLTV Analyst), whose [Positions Databases](https://public.tableau.com/app/profile/harry.richards4213/viz/OLDPositionsDatabaseArchived/PositionsDatabaseNER0cs) are a gold standard in the community.
+The dataset covers these primary roles: **Anchor, Rotator, Spacetaker, Lurker, and AWPer**.
+
+It is important to note that these labels are "fuzzy". Unlike positions in sports like Baseball (where a Pitcher is defined by the rules), or non-competitive videogames such as "Overwatch", Counter-Strike roles are strategic concepts. A "Lurker" might group up with the team for a specific execute. This ambiguity makes the classification task significantly harder (and more interesting) than a simple rule-based sort.
+
+Dataset available on: [Kaggle](https://www.kaggle.com/datasets/jamiepacker/cs2-playstyle-dataset-2024) / [Hugging Face](https://huggingface.co/datasets/Jamie-Packer/cs2-playstyle-dataset-2024) / [GitHub](https://github.com/Jamie-Packer/cs2-playstyle-analysis-2024-public)
 
 # Exploratory Analysis
 
