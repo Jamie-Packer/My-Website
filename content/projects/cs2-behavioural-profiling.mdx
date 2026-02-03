@@ -27,7 +27,7 @@ Counter-Strike (CS) has a [rich history](https://en.wikipedia.org/wiki/Counter-S
 Each match of **Counter-Strike acts as a complex system**, with 5 players (agents) split onto two sides and constrained by a virtual arena. 
 Out of this system, player "roles" have emerged as optimal ways to play the game. Similar to positions in football, terms like "Lurker" and "Anchor" describe a player's *functional responsibility* within the team structure.
 
-One motivation for this project is that while these roles are widely discussed, they are determined largely by the "eye test" or community consensus. They do not appear on the scoreboard. Quantifying these behaviors allows us to add rigor to the ongoing discussion in the scene. For example, we can move from debating if a player is an "Entry-Fragger" to measuring exactly where they sit in on a statistical spectrum of aggression and why.
+One motivation for this project is that while these roles are widely discussed, they are determined largely by the "eye test" or community consensus. They do not appear on the scoreboard. Quantifying these behaviours allows us to add rigour to the ongoing discussion in the scene. For example, we can move from debating if a player is an "Entry-Fragger" to measuring exactly where they sit in on a statistical spectrum of aggression and why.
 
 Beyond the theory, automated classification holds **potential for significant commercial value**. Services like [Leetify](https://leetify.com/) or [Scope.gg](https://scope.gg/) rely on providing users with a sense of "Identity". A tool that can mathematically validate a user's playstyle and tell them "You play like an Anchor" or "You played like (Pro Player) that match" could be a powerful engagement driver.
 
@@ -90,6 +90,110 @@ It is important to note that these labels are "fuzzy". Unlike positions in sport
 
 Dataset available on: [Kaggle](https://www.kaggle.com/datasets/jamiepacker/cs2-playstyle-dataset-2024) / [Hugging Face](https://huggingface.co/datasets/Jamie-Packer/cs2-playstyle-dataset-2024) / [GitHub](https://github.com/Jamie-Packer/cs2-playstyle-analysis-2024-public)
 
-# Exploratory Analysis
+---
 
-# Classifying Roles
+## Exploratory Analysis
+
+Before building any models, I needed to answer a fundamental question: *how many maps does a player need before their playstyle metrics stabilise?* 
+
+Using bootstrap resampling to estimate measurement uncertainty, I established a **40-map threshold**. Below this, behavioural estimates are too noisy to distinguish signal from variance. This filtered the dataset to a stable cohort of **84 professional players**, enough to draw meaningful conclusions while ensuring each player's statistics are reliable.
+
+### Side Asymmetry: T vs CT
+
+One of the clearest patterns in the data is the difference between attacking (T) and defending (CT) sides:
+
+*   **T-side players trade more consistently:** Both the proportion of deaths that get traded (+4.6pp) and the proportion of kills that *are* trades (+7.6pp) are significantly higher on T-side. This reflects the coordinated nature of T-side executes: attackers push together, ensuring deaths are avenged.
+*   **T-side shows greater behavioural diversity:** The standard deviation across most features is wider on T, while CT distributions are tighter. Defenders fall into more constrained patterns; attackers have more room for individual expression.
+*   **Yet T-side roles are *more* distinct:** Using Mahalanobis distance (a multivariate measure of "how different" each role is from the others), T-side roles showed clearer separation. The most distinct role? **T-side AWPers** (D² = 4.40), whose weapon constraints enforce a recognisable playstyle across all players.
+
+This asymmetry makes tactical sense: T-side strategies are *executed*, CT-side strategies are *reactive*.
+
+### The Positioning Problem (More Feature Engineering)
+
+Early analysis revealed a problem: the two positioning metrics, **ADNT** (distance to nearest teammate) and **ADAT** (distance from team centre), were highly correlated (r = 0.92 on T-side, 0.78 on CT-side). This makes intuitive sense: players far from their nearest teammate tend to be far from the team centre.
+
+But this correlation masked an interesting question: *do some roles position further from the centre than their isolation alone would predict?*
+
+To answer this, I decomposed the relationship using linear regression. By fitting `ADAT ~ ADNT` for each side and extracting the residuals, I created an **orthogonal positioning feature** that captures "central vs peripheral tendency" independent of isolation.
+
+The results were revealing:
+*   **Lurkers (T) and Anchors (CT)** consistently position *further* from the team centre than their isolation predicts, holding off-angles and peripheral positions.
+*   **AWPers (CT)** show the opposite: they stay *closer* to the centre despite isolation, holding fixed sightlines with team support nearby.
+*   **Rotators (CT)** showed the highest variance in this residual, reflecting their adaptive, context-dependent positioning.
+
+This feature engineering step reduced multicollinearity while preserving (and clarifying) the positional signal that distinguishes roles.
+
+> **Deep Dive:** View the <a href="/notebooks/01_eda.html" target="_blank" rel="noopener noreferrer">interactive HTML report</a> (11.4 MB) or the raw <a href="https://github.com/Jamie-Packer/cs2-playstyle-analysis-2024-public/blob/main/notebooks/01_eda.ipynb" target="_blank" rel="noopener noreferrer">Jupyter Notebook</a> on GitHub.
+
+---
+
+## Classifying Roles
+
+If roles are behaviourally distinct, can a machine learning model predict them purely from statistics?
+
+I tested four algorithms (Logistic Regression, SVM, Random Forest, and XGBoost) using **nested cross-validation** (4 splits × 20 repeats = 80 folds) to ensure robust performance estimates on a small dataset. The results revealed a fundamental difference between the two sides of the game.
+
+### T-Side: Linear Separability
+
+**Champion Model:** Logistic Regression | **F1-Macro: ~0.92**
+
+<FigureImage
+  src="/images/projects/cs2-behavioural-profiling/logreg_coefficients_t_filtered.svg"
+  alt="Logistic Regression Coefficients for T-side Roles"
+  caption="Logistic regression coefficients showing how each feature influences role classification on T-side. Positive values push predictions towards that role, negative values push away."
+  width={674}
+  height={504}
+/>
+
+The simplest model won. T-side roles are **linearly separable**: a straight line (or hyperplane) can cleanly divide AWPers, Lurkers, and Spacetakers in feature space. Complex ensembles like XGBoost offered no improvement.
+
+This means T-side role identities are *crisp*: positioning metrics (ADNT, ADAT Residual) combined with aggression (OAP, TAPD) fully define the archetypes. The model's coefficients tell a clear story:
+*   **Lurkers:** High isolation (ADNT), high trade-kill participation (POKT)
+*   **Spacetakers:** High opening attempts (OAP), low survival time (TAPD)
+*   **AWPers:** Low isolation (pack play), high survival time
+
+### CT-Side: Non-Linear Boundaries
+
+**Champion Model:** Random Forest | **F1-Macro: ~0.75**
+
+<FigureImage
+  src="/images/projects/cs2-behavioural-profiling/shap_beeswarm_grid_ct.svg"
+  alt="SHAP Feature Importance for CT-side Roles"
+  caption="SHAP beeswarm plots showing how features influence CT-side role predictions. Each dot represents a player; red indicates high feature values, blue indicates low values. Position along the x-axis shows impact on prediction."
+  width={604}
+  height={377}
+/>
+
+CT-side required more complexity. Logistic Regression plateaued at F1 ~0.67, while Random Forest's non-linear decision boundaries pushed performance to ~0.75.
+
+One of the limiting factors was **Rotator vs AWPer confusion.** These roles share similar positioning profiles on defence, and our features struggle to distinguish them. Interestingly, trade metrics (PODT, POKT) provided almost no discriminatory value on CT-side. Defensive role identity is almost entirely defined by *where* you play, not *how* you trade.
+
+### The "Ambiguous Role" Test
+
+To test whether the model struggled with *features* or *fuzzy definitions*, I ran a sensitivity analysis excluding the hybrid roles (Half-Lurker on T, Mixed on CT).
+
+The result: **F1 improved by +0.28 (T) and +0.21 (CT)**.
+
+This confirms that "Core" roles (Lurker, Spacetaker, Anchor, Rotator, AWPer) are statistically distinct archetypes. The hybrid roles weren't necessarily poorly-captured; they seem to genuinely blur the boundaries between playstyles.
+
+### The Sniper-Captain Confound
+
+The most interesting finding came from analysing *errors*.
+
+Four CT-side Rotators (**biguzera, chopper, bLitz, and apEX**) were confidently misclassified as AWPers. What do they have in common? They're all **In-Game Leaders (IGLs)**.
+
+Digging into their feature values revealed the cause: all four had unusually low ADAT Residuals, meaning they positioned closer to the team centre than typical Rotators. This "central positioning" pattern mimics the spacing profile of CT AWPers.
+
+Why would IGLs play centrally? **Information flow.** Central positions (think: Connector on Mirage, Middle on Ancient) allow the IGL to process information from both bombsites without relying on callouts. The trade-off is that these are high-engagement areas typically reserved for star players (often AWPers), which explains why IGLs are often criticised for underwhelming stats.
+
+This isn't a novel discovery. Analyst Harry Richards documented the ["supportive rotator" IGL trend in 2024](https://www.hltv.org/news/38747/why-more-and-more-igls-are-taking-up-the-supportive-rotator-role). But seeing the model independently surface this pattern validates both the features and the classification approach.
+
+### Diagnostic Value
+
+Perhaps the most practical outcome: **high-confidence misclassifications often pointed to labelling errors in the ground truth**.
+
+For example, **Spinx** was labelled as an Anchor but the model confidently predicted Rotator. Upon reviewing his 2024 matches, he did indeed play rotating positions on Vitality. I had simply mislabelled him when filling gaps in the dataset.
+
+This suggests a potential application: even if the model isn't accurate enough (yet) for fully automated labelling, it can serve as a **diagnostic tool** to flag inconsistencies in manually-curated role databases.
+
+> **Deep Dive:** View the <a href="/notebooks/03_classification.html" target="_blank" rel="noopener noreferrer">interactive HTML report</a> (3.2 MB) or the raw <a href="https://github.com/Jamie-Packer/cs2-playstyle-analysis-2024-public/blob/main/notebooks/03_classification.ipynb" target="_blank" rel="noopener noreferrer">Jupyter Notebook</a> on GitHub.
