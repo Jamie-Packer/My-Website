@@ -27,7 +27,7 @@ const HomePage = () => {
             Hello, <br /> I'm <span className="text-accent">Jamie.</span>
           </h1>
           <p className="text-lg sm:text-xl text-foreground2 max-w-xxl">
-            I'm a Data Science graduate looking for my first role in the industry.
+            A Data Science graduate looking for a role in the world of data.
           </p>
           <a
             href="#about"
@@ -55,7 +55,7 @@ const HomePage = () => {
             <div className="md:w-1-2 mb-8 md:mb-0">
               <h2 className="font-heading text-3xl font-bold mb-6">About Me</h2>
               <p className="text-foreground2 mb-8 text-lg">
-                I enjoy working with data to answer interesting questions and make cool models. My projects typically involve Python, machine learning, and statistical analysis. This site contains some links and information on what i've been up to. Have a look around! :)
+                Eager to learn. I enjoy working with data to produce tangible outcomes such as answering interesting questions and building useful models. My projects typically involve python, machine learning, and statistical analysis. This site contains links and information on what i've been up to. Have a look around! :)
               </p>
               <div className="flex space-x-8">
                 <a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ" target="_blank" rel="noopener noreferrer" className="text-foreground hover:text-accent transition-colors duration-200" aria-label="Email Me">

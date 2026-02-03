@@ -4,6 +4,7 @@ import YouTubeEmbed from '@/components/YouTubeEmbed';
 import TagList from "@/components/TagList";
 import { notFound } from 'next/navigation';
 import FigureImage from '@/components/FigureImage';
+import MDXLink from '@/components/MDXLink';
 
 export async function generateStaticParams() {
   const articles = await getSortedContentData<ArticleMetadata>('articles');
@@ -22,6 +23,7 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
   const articleMetadata = metadata as ArticleMetadata;
 
   const components = {
+    a: MDXLink,
     YouTubeEmbed,
     TagList,
     FigureImage,
