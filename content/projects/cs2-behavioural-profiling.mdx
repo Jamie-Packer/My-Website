@@ -1,10 +1,10 @@
 ---
 title: "Behavioural Modelling & Classification in Counter-Strike"
 date: '2026-01-01'
-description: "A deep dive into professional Counter-Strike 2 player behaviour. Using a custom dataset to quantify abstract behavioural patterns and predict player 'roles' with Machine Learning."
+description: "An analytical exploration into professional Counter-Strike 2 player behaviour. Using a custom dataset to quantify abstract behavioural patterns and predict player 'roles' with Machine Learning."
 published: true
 repoUrl: "https://github.com/Jamie-Packer/cs2-playstyle-analysis-2024-public"
-imageUrl: "/images/projects/cs2-playstyle-2024/T_KDE_Sample.svg"
+imageUrl: "/images/projects/cs2-behavioural-profiling/T_KDE_Sample.svg"
 tags: ["Data Analysis", "Machine Learning", "Feature Engineering", "Statistics", "Python", "Counter-Strike"]
 ---
 
@@ -14,8 +14,8 @@ tags: ["Data Analysis", "Machine Learning", "Feature Engineering", "Statistics",
 
 **Key Outcomes:**
 *   **Data Processing & Feature Engineering:** Processed over 1,000 match replay files (>400GB) to engineer a robust dataset of behavioural features, representing aspects of 'playstyle' such as aggression, trading, and positioning.
-*   **Quantifying Behaviour:** Used statistical analysis to formally model behavioural differences across roles, providing empirical validation for domain intuition (e.g. verifying how specific roles differ in positioning) while uncovering novel insights.
-*   **Role Classification:** Developed a supervised learning model as a proof-of-concept for automating role labelling. Achieved **~0.92 (T-Side), ~0.76 (CT-Side) F1-Macro scores**, demonstrating that player roles are statistically distinct (T-side more so) and enabling the algorithmic identification of mislabelled data.
+*   **Quantifying Behaviour:** Used statistical analysis (including **visualisation, hypothesis testing and regression analysis**) to formally model behavioural differences across roles, providing empirical validation for domain intuition (e.g. verifying how specific roles differ in positioning).
+*   **Role Classification:** Developed a supervised learning model as a proof-of-concept for automating role labelling. Achieved **~0.92 (T-Side), ~0.76 (CT-Side) F1-Macro scores**, demonstrating that player roles are statistically distinct and enabling the algorithmic identification of mislabelled data.
 
 > **Potential Utility:** This framework offers a scalable method for automated role labelling, applicable when manual annotation is unfeasible, such as on commercial analytics platforms or for large datasets.
 
@@ -43,7 +43,7 @@ To ensure high-quality "labels" for the roles, the data was restricted to **Tier
 *   **Total Raw Size:** >416 GB
 *   **Parsing Tool:** [`awpy`](https://github.com/pnxenopoulos/awpy) (Python)
 
-Parsing binary protobuf files at this scale presented significant engineering challenges, including handling corrupted demos, technical pauses, and the sheer computational cost of processing hundreds of gigabytes of unstructured event data into usable pandas DataFrames.
+Parsing binary files at this scale presented significant engineering challenges, including handling corrupted demos, technical pauses, and the sheer computational cost of processing hundreds of gigabytes of semi-structured event data into usable pandas DataFrames.
 
 <FigureImage
   src="/images/projects/university/feature_extraction.svg"
@@ -83,7 +83,7 @@ To solve this, I implemented a **Team-Relative Rank** system. For every sampled 
 This normalisation allows one to compare the positional style of players, despite differences in which maps their teams tend to play (decided by a veto process).
 
 ### The Target Labels
-To supervise the analysis, I used expert role labels from **Harry Richards** (HLTV Analyst), whose [Positions Databases](https://public.tableau.com/app/profile/harry.richards4213/viz/OLDPositionsDatabaseArchived/PositionsDatabaseNER0cs) are a gold standard in the community.
+To supervise the analysis, I used expert role labels from [**Harry Richards**](https://x.com/NER0cs) (HLTV Analyst), whose [Positions Databases](https://public.tableau.com/app/profile/harry.richards4213/viz/OLDPositionsDatabaseArchived/PositionsDatabaseNER0cs) are a gold standard in the community.
 The dataset covers these primary roles: **Anchor, Rotator, Spacetaker, Lurker, and AWPer**.
 
 It is important to note that these labels are "fuzzy". Unlike positions in sports like Baseball (where a Pitcher is defined by the rules), or non-competitive videogames such as "Overwatch", Counter-Strike roles are strategic concepts. A "Lurker" might group up with the team for a specific execute. This ambiguity makes the classification task significantly harder (and more interesting) than a simple rule-based sort.
@@ -94,7 +94,7 @@ Dataset available on: [Kaggle](https://www.kaggle.com/datasets/jamiepacker/cs2-p
 
 ## Exploratory Analysis
 
-Before building any models, I needed to answer a fundamental question: *how many maps does a player need before their playstyle metrics stabilise?* 
+Before building any models, I needed to answer a fundamental question: *how many matches (maps) does a player need before their playstyle metrics stabilise?* 
 
 Using bootstrap resampling to estimate measurement uncertainty, I established a **40-map threshold**. Below this, behavioural estimates are too noisy to distinguish signal from variance. This filtered the dataset to a stable cohort of **84 professional players**, enough to draw meaningful conclusions while ensuring each player's statistics are reliable.
 
@@ -116,7 +116,7 @@ But this correlation masked an interesting question: *do some roles position fur
 
 To answer this, I decomposed the relationship using linear regression. By fitting `ADAT ~ ADNT` for each side and extracting the residuals, I created an **orthogonal positioning feature** that captures "central vs peripheral tendency" independent of isolation.
 
-The results were revealing:
+The results were [revealing](#igl-positioning):
 *   **Lurkers (T) and Anchors (CT)** consistently position *further* from the team centre than their isolation predicts, holding off-angles and peripheral positions.
 *   **AWPers (CT)** show the opposite: they stay *closer* to the centre despite isolation, holding fixed sightlines with team support nearby.
 *   **Rotators (CT)** showed the highest variance in this residual, reflecting their adaptive, context-dependent positioning.
@@ -180,20 +180,32 @@ This confirms that "Core" roles (Lurker, Spacetaker, Anchor, Rotator, AWPer) are
 
 The most interesting finding came from analysing *errors*.
 
-Four CT-side Rotators (**biguzera, chopper, bLitz, and apEX**) were confidently misclassified as AWPers. What do they have in common? They're all **In-Game Leaders (IGLs)**.
+Four CT-side Rotators (**biguzera, chopper, bLitz, and apEX**) were misclassified as AWPers, sometimes confidently. What do they have in common? They're all **In-Game Leaders (IGLs)**.
 
-Digging into their feature values revealed the cause: all four had unusually low ADAT Residuals, meaning they positioned closer to the team centre than typical Rotators. This "central positioning" pattern mimics the spacing profile of CT AWPers.
+Digging into IGL feature values revealed the cause: almost all have unusually low ADAT Residuals, meaning they positioned closer to the team centre than typical Rotators. This "central positioning" pattern mimics the spacing profile of CT AWPers.
 
-Why would IGLs play centrally? **Information flow.** Central positions (think: Connector on Mirage, Middle on Ancient) allow the IGL to process information from both bombsites without relying on callouts. The trade-off is that these are high-engagement areas typically reserved for star players (often AWPers), which explains why IGLs are often criticised for underwhelming stats.
+<div id="igl-positioning" />
+<FigureImage
+  src="/images/projects/cs2-behavioural-profiling/igl_feature_ct_adat_residual_ct.svg"
+  alt="IGL Positioning Distribution"
+  caption="Comparison of ADAT Residual values for IGLs versus the wider CT role distribution. IGLs across all roles show a clear tendency towards central positioning (lower residual values)."
+  width={713}
+  height={426}
+/>
 
-This isn't a novel discovery. Analyst Harry Richards documented the ["supportive rotator" IGL trend in 2024](https://www.hltv.org/news/38747/why-more-and-more-igls-are-taking-up-the-supportive-rotator-role). But seeing the model independently surface this pattern validates both the features and the classification approach.
+Why would IGLs play centrally? **Information flow.** Central positions (think: Connector on Mirage, Middle on Ancient) allow the IGL to process information from both bombsites without relying solely on callouts. The trade-off is that these are high-engagement areas typically reserved for star players (often AWPers), which contributes to why IGLs are often criticised for underwhelming stats.
+
+This isn't a novel discovery. Analyst [Harry Richards](https://x.com/NER0cs) documented the ["supportive rotator" IGL trend in 2024](https://www.hltv.org/news/38747/why-more-and-more-igls-are-taking-up-the-supportive-rotator-role). But seeing the model independently surface this pattern validates both the features and the classification approach.
 
 ### Diagnostic Value
 
-Perhaps the most practical outcome: **high-confidence misclassifications often pointed to labelling errors in the ground truth**.
+Perhaps the most practical outcome: **high-confidence "misclassifications" could point to labelling errors**.
 
 For example, **Spinx** was labelled as an Anchor but the model confidently predicted Rotator. Upon reviewing his 2024 matches, he did indeed play rotating positions on Vitality. I had simply mislabelled him when filling gaps in the dataset.
 
 This suggests a potential application: even if the model isn't accurate enough (yet) for fully automated labelling, it can serve as a **diagnostic tool** to flag inconsistencies in manually-curated role databases.
 
 > **Deep Dive:** View the <a href="/notebooks/03_classification.html" target="_blank" rel="noopener noreferrer">interactive HTML report</a> (3.2 MB) or the raw <a href="https://github.com/Jamie-Packer/cs2-playstyle-analysis-2024-public/blob/main/notebooks/03_classification.ipynb" target="_blank" rel="noopener noreferrer">Jupyter Notebook</a> on GitHub.
+
+
+
