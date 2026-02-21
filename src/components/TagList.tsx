@@ -4,7 +4,7 @@ interface TagListProps {
   items: string[];
 }
 
-const TagList = ({ items }: TagListProps) => {
+const TagList = ({ items = [] }: TagListProps) => {
   return (
     <div className="flex flex-wrap gap-2 mt-4">
       {items.map((item) => (

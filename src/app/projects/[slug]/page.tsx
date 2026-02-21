@@ -98,7 +98,7 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
           </div>
 
           <div className="prose prose-lg prose-invert max-w-none">
-            <MDXRemote source={content} components={components} />
+            <MDXRemote source={content} components={components} options={{ blockJS: false }} />
           </div>
         </article>
       </div>
