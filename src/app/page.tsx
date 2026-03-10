@@ -55,7 +55,7 @@ const HomePage = () => {
             <div className="md:w-1-2 mb-8 md:mb-0">
               <h2 className="font-heading text-3xl font-bold mb-6">About Me</h2>
               <p className="text-foreground2 mb-8 text-lg">
-                Always learning! I enjoy working with data for tangible ends such as analysis, building useful models or providing the infrastructure for such things. My projects so far have generally involved python, machine learning, and statistical analysis. This site contains links and information on what i've been up to. Have a look around! :)
+                Always learning! I enjoy working with data for <strong>tangible</strong> ends like building useful models, producing insightful analysis or creating the infrastructure for such things! My projects so far have focused on using python for feature engineering, machine learning and statistical analysis, and I'm currently learning more about data engineering. This site contains links and information on what i've been up to. Have a look around! :)
               </p>
               <div className="flex space-x-8">
                 <a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ" target="_blank" rel="noopener noreferrer" className="text-foreground hover:text-accent transition-colors duration-200" aria-label="Email Me">
