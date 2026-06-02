@@ -7,7 +7,7 @@ const Navbar = () => {
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         {/* Mobile: spread out | Desktop: centered */}
         <div className="flex h-16 items-center justify-between md:justify-center">
-          <div className="flex w-full items-center justify-between font-heading md:w-auto md:space-x-8 md:space-x-2">
+          <div className="flex w-full items-center justify-between font-heading md:w-auto md:space-x-8">
             {/* Articles */}
             <Link
               href="/articles"

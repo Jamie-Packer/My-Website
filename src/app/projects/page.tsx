@@ -1,7 +1,14 @@
 // src/app/projects/page.tsx
 
+import type { Metadata } from "next";
 import ProjectCard from "@/components/ProjectCard";
 import { getSortedContentData, ProjectMetadata } from "@/lib/content";
+
+export const metadata: Metadata = {
+  title: "Projects",
+  description:
+    "A collection of links, information and write-ups about what I've been working on.",
+};
 
 export default async function ProjectsPage() {
   const projects = await getSortedContentData<ProjectMetadata>('projects');

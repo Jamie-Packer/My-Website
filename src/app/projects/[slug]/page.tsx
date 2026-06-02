@@ -1,4 +1,5 @@
 // src/app/projects/[slug]/page.tsx
+import type { Metadata } from "next";
 import { getSortedContentData, getContentBySlug, ProjectMetadata } from '@/lib/content';
 import { MDXRemote } from 'next-mdx-remote/rsc';
 import Image from 'next/image';
@@ -18,6 +19,27 @@ export async function generateStaticParams() {
   return projects.map((project) => ({
     slug: project.slug,
   }));
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}): Promise<Metadata> {
+  const { slug } = await params;
+  const entry = await getContentBySlug<ProjectMetadata>("projects", slug);
+  if (!entry) return {};
+
+  const { title, description, imageUrl } = entry.metadata;
+  return {
+    title,
+    description,
+    openGraph: {
+      title,
+      description,
+      images: [imageUrl],
+    },
+  };
 }
 
 export default async function ProjectPage({ params }: { params: Promise<{ slug: string }> }) {

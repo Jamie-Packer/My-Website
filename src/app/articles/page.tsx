@@ -1,8 +1,14 @@
 // src/app/articles/page.tsx
 
+import type { Metadata } from "next";
 import Link from 'next/link';
 import ArticleSummary from '@/components/ArticleSummary';
 import { getSortedContentData, ArticleMetadata } from '@/lib/content';
+
+export const metadata: Metadata = {
+  title: "Articles",
+  description: "Articles and writing by Jamie Packer.",
+};
 
 const ArticlesPage = async () => {
   const articles = await getSortedContentData<ArticleMetadata>('articles');
