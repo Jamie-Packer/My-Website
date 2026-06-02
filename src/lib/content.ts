@@ -79,6 +79,8 @@ export async function getContentBySlug<T extends object>(
   type: Kind,
   slug: string
 ): Promise<{ metadata: WithSlug<T>; content: string } | null> {
+  if (!/^[a-z0-9-]+$/.test(slug)) return null;
+
   const fullPath = path.join(dirFor(type), `${slug}.mdx`);
 
   let raw: string;

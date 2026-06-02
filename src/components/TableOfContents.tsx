@@ -140,7 +140,7 @@ export default function TableOfContents({
                   href={`#${n.id}`}
                   onClick={handleClick(n.id)}
                   className={[
-                    "block rounded-xl px-2 py-1 text-large transition",
+                    "block rounded-xl px-2 py-1 text-lg transition",
                     depth === 0 ? "font-medium" : "opacity-90",
                     isActive ? "bg-foreground/10" : "hover:bg-foreground/5",
                     "text-foreground",

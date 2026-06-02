@@ -26,7 +26,7 @@ const HomePage = () => {
           <h1 className="font-heading text-4xl sm:text-5xl lg:text-6xl font-bold mb-4">
             Hello, <br /> I'm <span className="text-accent">Jamie.</span>
           </h1>
-          <p className="text-lg sm:text-xl text-foreground2 max-w-xxl">
+          <p className="text-lg sm:text-xl text-foreground2 max-w-2xl">
             A Data Science graduate looking for my first role in the industry.
           </p>
           <a
@@ -51,14 +51,14 @@ const HomePage = () => {
         </a>
 
         <div className="container mx-auto max-w-4xl">
-          <div className="flex flex-col md:flex-row items-center md:space-x-12">
-            <div className="md:w-1-2 mb-8 md:mb-0">
+          <div className="flex flex-col md:flex-row md:items-start md:gap-12">
+            <div className="md:flex-1 md:min-w-0 mb-8 md:mb-0">
               <h2 className="font-heading text-3xl font-bold mb-6">About Me</h2>
               <p className="text-foreground2 mb-8 text-lg">
                 Always learning. Whether I'm doing analysis, building a useful model, or designing the pipeline, I enjoy working with real data for real reasons. My projects so far have generally utilised Python, machine learning, and statistical analysis. This site contains links and information on what I've been up to. Have a look around! :)
               </p>
               <div className="flex space-x-8">
-                <a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ" target="_blank" rel="noopener noreferrer" className="text-foreground hover:text-accent transition-colors duration-200" aria-label="Email Me">
+                <a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ" target="_blank" rel="noopener noreferrer" className="text-foreground hover:text-accent transition-colors duration-200">
                   <EmailIcon className="w-8 h-8" />
                 </a>
                 <a href="https://www.linkedin.com/in/jamie-packer-622101238/" target="_blank" rel="noopener noreferrer" className="text-foreground hover:text-accent transition-colors duration-200" aria-label="LinkedIn Profile">
@@ -69,24 +69,24 @@ const HomePage = () => {
                 </a>
               </div>
             </div>
-            <div className="md:w-1/2 flex flex-col space-y-4">
+            <div className="flex w-full max-w-xs md:w-28 md:max-w-none shrink-0 flex-col gap-4">
               <a
                 href="/Jamie_Packer_CV.pdf"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="bg-accent hover:brightness-150 text-foreground font-bold py-3 px-6 rounded-md transition-colors duration-200 text-center flex-1"
+                className="block w-full bg-accent hover:brightness-150 text-foreground font-bold py-3 px-6 rounded-md transition-colors duration-200 text-center"
               >
                 View CV
               </a>
               <Link
                 href="/projects"
-                className="bg-background hover:brightness-130 text-foreground font-bold py-3 px-6 rounded-md transition-colors duration-200 text-center flex-1"
+                className="block w-full bg-background hover:brightness-125 text-foreground font-bold py-3 px-6 rounded-md transition-colors duration-200 text-center"
               >
                 My Projects
               </Link>
               <Link
                 href="/articles"
-                className="bg-background hover:brightness-130 text-foreground font-bold py-3 px-6 rounded-md transition-colors duration-200 text-center flex-1"
+                className="block w-full bg-background hover:brightness-125 text-foreground font-bold py-3 px-6 rounded-md transition-colors duration-200 text-center"
               >
                 My Articles
               </Link>
