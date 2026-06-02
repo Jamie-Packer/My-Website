@@ -44,7 +44,7 @@ const HomePage = () => {
         {/* 'Back to Top' Button */}
         <a 
           href="#" 
-          className="absolute top-16 left-1/2 -translate-x-1/2 bg-accent text-foreground rounded-full w-14 h-14 flex items-center justify-center text-2xl font-bold transition duration-200 hover:brightness-75"
+          className="absolute top-16 left-1/2 -translate-x-1/2 bg-accent text-foreground rounded-full w-12 h-12 flex items-center justify-center text-2xl font-bold transition duration-200 hover:brightness-150"
           aria-label="Back to top"
         >
           ↑
@@ -55,7 +55,7 @@ const HomePage = () => {
             <div className="md:flex-1 md:min-w-0 mb-8 md:mb-0">
               <h2 className="font-heading text-3xl font-bold mb-6">About Me</h2>
               <p className="text-foreground2 mb-8 text-lg">
-                Always learning! I enjoy working with data for <strong>tangible</strong> ends like building useful models, producing insightful analysis or creating the infrastructure for such things! My projects so far have focused on using python for feature engineering, machine learning and statistical analysis, and I'm currently learning more about data engineering. This site contains links and information on what i've been up to. Have a look around! :)
+                Always learning. Whether I'm doing analysis, building a useful model, or designing the pipeline, I enjoy working with real data for real reasons. My projects so far have generally utilised Python, machine learning, and statistical analysis. This site contains links and information on what I've been up to. Have a look around! :)
               </p>
               <div className="flex space-x-8">
                 <a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ" target="_blank" rel="noopener noreferrer" className="text-foreground hover:text-accent transition-colors duration-200">

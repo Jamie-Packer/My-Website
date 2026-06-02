@@ -11,7 +11,7 @@ tags: ["Data Science", "AI", "Machine Learning", "Deep Learning", "Statistics", 
 
 During my degree I completed a range of coursework and projects that gave me practical experience with **data science, machine learning, and database theory/design**. While many of my modules were statistics-focused and built a strong theoretical foundation, this page highlights the more applied projects where I used those skills to solve problems and build working solutions.  
 
-Alongside these, I’ve also included a short section on other courseworks that were valuable for learning and broadening my skillset. Together, they demonstrate both my core strengths and the variety of methods I explored during my studies.
+Alongside these, I've also included a short section on other courseworks that were valuable for learning and broadening my skillset. Together, they demonstrate both my core strengths and the variety of methods I explored during my studies.
 
 ---
 
@@ -84,7 +84,7 @@ If you want to know more of what was involved in these modules, you can find out
 ]} />
 
 
-For my final-year project (equivalent of a dissertation) I tackled a problem in a space I’m genuinely passionate about: using data science to understand professional Counter-Strike (the videogame). The project set out to measure the link between playstyles (how a player plays the game) and roles (the responsibilities they are expected to fulfil in a team).
+For my final-year project (equivalent of a dissertation) I tackled a problem in a space I'm genuinely passionate about: using data science to understand professional Counter-Strike (the videogame). The project set out to measure the link between playstyles (how a player plays the game) and roles (the responsibilities they are expected to fulfil in a team).
 
 #### TL;DR
 This was a machine learning-based data analysis. I managed to show that **data-driven playstyle profiles meaningfully align with expert role labels** while also revealing fluidity and overlap in how roles manifest.
@@ -97,7 +97,7 @@ To achieve this, I designed a bespoke workflow to process ~400GB of raw match da
 
   #### Data Processing
 
-  To do this, I built a bespoke data processing workflow. Starting with over 400GB of raw "demofiles" (gameplay data) from tournaments in 2024, I used the <a href="https://github.com/pnxenopoulos/awpy" target="_blank" rel="noopener noreferrer">awpy</a> python library to parse the game events and then engineered a bespoke set of behavioural features. These weren’t performance metrics like K/D — they were designed to quantify *how* a player approached the game, not *how well*:
+  To do this, I built a bespoke data processing workflow. Starting with over 400GB of raw "demofiles" (gameplay data) from tournaments in 2024, I used the <a href="https://github.com/pnxenopoulos/awpy" target="_blank" rel="noopener noreferrer">awpy</a> python library to parse the game events and then engineered a bespoke set of behavioural features. These weren't performance metrics like K/D; they were designed to quantify *how* a player approached the game, not *how well*:
 
   - Aggression (time alive per death, opening duel attempts)  
   - Trading (proportion of kills and deaths traded)  
@@ -116,9 +116,9 @@ To achieve this, I designed a bespoke workflow to process ~400GB of raw match da
   #### Data analysis methodology
 
   I carried out extensive exploratory analysis on the engineered features. This included stability checks to ensure they were consistent across sufficient samples, **correlation analysis** to study relationships between them, and analysed a **linear regression stratified by role** on the positional metrics to determine whether both captured distinct information. Principal component analysis (PCA) and t-SNE were used for visualisation of the space.
-  I also ran preliminary classification experiments with **Logistic Regression** and **Random Forests** to test how well the features could predict role labels. Throughout this process I generated a large number of plots — distributions, correlations, regressions, and role comparisons — to visualise and validate the behaviour of the features.
+  I also ran preliminary classification experiments with **Logistic Regression** and **Random Forests** to test how well the features could predict role labels. Throughout this process I generated a large number of plots (distributions, correlations, regressions, and role comparisons) to visualise and validate the behaviour of the features.
 
-  I then moved on to several **clustering methods** (**K-Means**, **Hierarchical**, **Gaussian Mixture Models**) to see if natural “archetypes” emerged. Cluster quality was assessed using internal validation metrics such as the **Silhouette Coefficient** and **Calinski–Harabasz Index**, while external comparison with expert-assigned role labels was quantified using **Normalized Mutual Information (NMI)** and the **Adjusted Rand Index (ARI)**. Together, these steps created a rigorous analytical framework that contextualised the clustering results and highlighted both the structure and limitations of the data.
+  I then moved on to several **clustering methods** (**K-Means**, **Hierarchical**, **Gaussian Mixture Models**) to see if natural "archetypes" emerged. Cluster quality was assessed using internal validation metrics such as the **Silhouette Coefficient** and **Calinski–Harabasz Index**, while external comparison with expert-assigned role labels was quantified using **Normalized Mutual Information (NMI)** and the **Adjusted Rand Index (ARI)**. Together, these steps created a rigorous analytical framework that contextualised the clustering results and highlighted both the structure and limitations of the data.
 
   <FigureImage
   src="/images/projects/university/CS_T_Features_PCA.svg"
@@ -131,11 +131,11 @@ To achieve this, I designed a bespoke workflow to process ~400GB of raw match da
 
   #### Interpretations
 
-  The analysis showed clear spectra for rifler roles, distinct separation of snipers (AWPers), and measurable though overlapping groupings that aligned with expert role labels from the CS community. **In short, I was able to demonstrate that with just a few carefully engineered features, data-driven playstyle profiles corresponded with how analysts describe roles**, while also highlighting ambiguities and role fluidity. **T-side roles proved more distinguishable than the CT-side**, where playstyles were less separable and clusters weaker — a finding that mirrors the greater individual flexibility demanded on the defensive side. Notably, **T-side AWPers consistently formed the most distinct cluster**, showing that their behavioural signature was strong enough to emerge from positioning and engagement patterns alone. Meanwhile, rifler roles often appeared along spectra (e.g. Spacetaker ↔ Lurker, Anchor ↔ Rotator) rather than as discrete groups, reinforcing that **playstyles exist on a continuum rather than in fixed categories**.
+  The analysis showed clear spectra for rifler roles, distinct separation of snipers (AWPers), and measurable though overlapping groupings that aligned with expert role labels from the CS community. **In short, I was able to demonstrate that with just a few carefully engineered features, data-driven playstyle profiles corresponded with how analysts describe roles**, while also highlighting ambiguities and role fluidity. **T-side roles proved more distinguishable than the CT-side**, where playstyles were less separable and clusters weaker, which mirrors the greater individual flexibility demanded on the defensive side. Notably, **T-side AWPers consistently formed the most distinct cluster**, showing that their behavioural signature was strong enough to emerge from positioning and engagement patterns alone. Meanwhile, rifler roles often appeared along spectra (e.g. Spacetaker ↔ Lurker, Anchor ↔ Rotator) rather than as discrete groups, reinforcing that **playstyles exist on a continuum rather than in fixed categories**.
 
   #### Conclusion
 
-  This project gave me experience with a full data workflow — messy raw data acquisition, custom feature engineering, validation, clustering, and analysis — and produced a unique dataset and methodology in a field that hasn’t seen much academic work yet. It was the most meaningful piece of coursework I did, combining technical depth with a domain I have relative expertise in.
+  This project gave me experience with a complete data workflow: raw data acquisition, custom feature engineering, validation, clustering, and analysis. It produced a unique dataset and methodology in a field that hasn't seen much academic work yet, and was the most meaningful piece of work I did at university, combining technical depth with a domain I have genuine expertise in.
 
 </details>
 
@@ -165,7 +165,7 @@ This coursework used **Fashion-MNIST** to build a cloud-backed **image classific
   height={512}
   />
 
-I uploaded the provided artefacts to **Cloud Storage**, registered a pre-trained model in **Vertex AI**, and deployed it to an endpoint. From a **Vertex AI Workbench** notebook, I wrote **Python** to preprocess test images, call the endpoint, and record metrics — **precision**, **recall**, **F1-score**, and accuracy. I then loaded the second pre-trained model locally with **TensorFlow/Keras** and ran the same evaluation for a like-for-like comparison; both pre-trained paths delivered similar results (weighted **F1 ≈ 0.88**).
+I uploaded the provided artefacts to **Cloud Storage**, registered a pre-trained model in **Vertex AI**, and deployed it to an endpoint. From a **Vertex AI Workbench** notebook, I wrote **Python** to preprocess test images, call the endpoint, and record metrics: **precision**, **recall**, **F1-score**, and accuracy. I then loaded the second pre-trained model locally with **TensorFlow/Keras** and ran the same evaluation for a like-for-like comparison; both pre-trained paths delivered similar results (weighted **F1 ≈ 0.88**).
 
 To extend the work, I trained a compact **convolutional neural network** and exported it for reuse. The custom model reached a weighted **F1 ≈ 0.89**, a **negligible** lift over the baselines.
 Given the extra setup and higher credit spend, I favoured the pre-trained baseline for **price–performance**, and would deploy to a Vertex AI endpoint when a managed, real-time API is required.
