@@ -21,8 +21,13 @@ const faustina = Faustina({
 
 
 export const metadata: Metadata = {
-  title: "Jamie Packer",
-  description: "Jamie's personal website",
+  metadataBase: new URL("https://jamiepacker.com"),
+  title: {
+    template: "%s | Jamie Packer",
+    default: "Jamie Packer",
+  },
+  description:
+    "Jamie Packer — Data Science graduate. Projects, articles, and more.",
   icons: {
     icon: "/icon.svg",
     shortcut: "/favicon.png",

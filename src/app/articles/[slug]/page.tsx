@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { getSortedContentData, getContentBySlug, ArticleMetadata } from '@/lib/content';
 import { MDXRemote } from 'next-mdx-remote/rsc';
 import YouTubeEmbed from '@/components/YouTubeEmbed';
@@ -11,6 +12,27 @@ export async function generateStaticParams() {
   return articles.map((article) => ({
     slug: article.slug,
   }));
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}): Promise<Metadata> {
+  const { slug } = await params;
+  const entry = await getContentBySlug<ArticleMetadata>("articles", slug);
+  if (!entry) return {};
+
+  const { title, description, imageUrl } = entry.metadata;
+  return {
+    title,
+    ...(description ? { description } : {}),
+    openGraph: {
+      title,
+      ...(description ? { description } : {}),
+      ...(imageUrl ? { images: [imageUrl] } : {}),
+    },
+  };
 }
 
 export default async function ArticlePage({ params }: { params: Promise<{ slug: string }> }) {

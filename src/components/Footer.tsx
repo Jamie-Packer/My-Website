@@ -17,12 +17,11 @@ const Footer = () => {
             <a href="https://www.linkedin.com/in/jamie-packer-622101238/" target="_blank" rel="noopener noreferrer" className="text-foreground2 hover:text-accent transition-colors duration-200" aria-label="LinkedIn Profile">
               <LinkedInIcon className="w-6 h-6" />
             </a>
-            <a 
-              href="https://www.youtube.com/watch?v=dQw4w9WgXcQ" 
-              target="_blank" 
+            <a
+              href="https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+              target="_blank"
               rel="noopener noreferrer"
-              className="text-foreground2 hover:text-accent transition-colors duration-200" 
-              aria-label="Email Me"
+              className="text-foreground2 hover:text-accent transition-colors duration-200"
             >
               <EmailIcon className="w-6 h-6" />
             </a>
