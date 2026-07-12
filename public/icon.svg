@@ -7,8 +7,30 @@
    viewBox="0 0 32 32"
    version="1.1"
    id="svg1"
+   sodipodi:docname="icon.svg"
+   inkscape:version="1.4 (86a8ad7, 2024-10-11)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns="http://www.w3.org/2000/svg"
    xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview1"
+     pagecolor="#ffffff"
+     bordercolor="#999999"
+     borderopacity="1"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:zoom="17.832349"
+     inkscape:cx="10.122054"
+     inkscape:cy="17.636487"
+     inkscape:window-width="1920"
+     inkscape:window-height="1009"
+     inkscape:window-x="-8"
+     inkscape:window-y="-8"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="layer1" />
   <defs
      id="defs1" />
   <g
@@ -22,11 +44,11 @@
     <text
        xml:space="preserve"
        style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:21.3333px;line-height:1.1;font-family:Butler;-inkscape-font-specification:Butler;text-align:start;letter-spacing:1.28px;writing-mode:lr-tb;direction:ltr;text-anchor:start;fill:#800000;stroke-width:4.9285;paint-order:markers stroke fill"
-       x="5.4329324"
+       x="6.2180223"
        y="22.901031"
        id="text1"><tspan
          id="tspan1"
-         x="5.4329324"
+         x="6.2180223"
          y="22.901031"
          style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:21.3333px;font-family:Serif;-inkscape-font-specification:Serif;fill:#800000">JP</tspan></text>
   </g>
