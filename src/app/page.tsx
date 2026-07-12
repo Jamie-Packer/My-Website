@@ -14,7 +14,7 @@ const HomePage = () => {
       <section id="hero" className="grid grid-cols-1 md:grid-cols-2 min-h-screen">
         <div className="bg-background hidden md:block relative">
           <Image
-            src="/images/home/home_image.png"
+            src="/images/home/home_image.webp"
             alt="Hero Background"
             fill
             className="object-cover"
@@ -27,7 +27,7 @@ const HomePage = () => {
             Hello, <br /> I'm <span className="text-accent">Jamie.</span>
           </h1>
           <p className="text-lg sm:text-xl text-foreground2 max-w-2xl">
-            A Data Science graduate looking for my first role in the industry.
+            A data enthusiast looking for my first role in the industry.
           </p>
           <a
             href="#about"
@@ -55,7 +55,9 @@ const HomePage = () => {
             <div className="md:flex-1 md:min-w-0 mb-8 md:mb-0">
               <h2 className="font-heading text-3xl font-bold mb-6">About Me</h2>
               <p className="text-foreground2 mb-8 text-lg">
-                Always learning. Whether I'm doing analysis, building a useful model, or designing the pipeline, I enjoy working with real data for real reasons. My projects so far have generally utilised Python, machine learning, and statistical analysis. This site contains links and information on what I've been up to. Have a look around! :)
+                Since obtaining my BSc Data Science in 2025, I have been ruthlessly upskilling to prepare for a career in data.  I am <em>always</em> learning.
+                <br/><br/>
+                Whether it's performing analysis, building a useful model, or designing the pipeline, I enjoy working with <b>real data for real reasons.</b> This site contains information and links to what I've been up to. Have a look around! :)
               </p>
               <div className="flex space-x-8">
                 <a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ" target="_blank" rel="noopener noreferrer" className="text-foreground hover:text-accent transition-colors duration-200">
