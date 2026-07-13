@@ -17,7 +17,7 @@ const ProjectLinks = ({
   repoUrl,
   liveLabel = 'Live Site',
   repoLabel = 'GitHub',
-  className = '',
+  className = 'mt-4',
 }: ProjectLinksProps) => {
   if (!liveUrl && !repoUrl) return null;
 

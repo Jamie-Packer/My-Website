@@ -45,7 +45,7 @@ const ProjectCard = ({ slug, title, description, imageUrl, tags, liveUrl, repoUr
       {(liveUrl || repoUrl) && (
         <div className="px-6 pb-6 pt-2 mt-auto">
           <div className="border-t border-foreground/10 pt-4">
-            <ProjectLinks liveUrl={liveUrl} repoUrl={repoUrl} />
+            <ProjectLinks className="mt-0" liveUrl={liveUrl} repoUrl={repoUrl} />
           </div>
         </div>
       )}
