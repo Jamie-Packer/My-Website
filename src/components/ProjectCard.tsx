@@ -2,8 +2,7 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
-import GitHubIcon from '@/components/icons/GitHubIcon';
-import ExternalLinkIcon from './icons/ExternalLinkIcon';
+import ProjectLinks from '@/components/ProjectLinks';
 
 interface ProjectCardProps {
   slug: string;
@@ -45,19 +44,8 @@ const ProjectCard = ({ slug, title, description, imageUrl, tags, liveUrl, repoUr
       {/* SECTION 2: This part contains the separate, external links */}
       {(liveUrl || repoUrl) && (
         <div className="px-6 pb-6 pt-2 mt-auto">
-          <div className="border-t border-foreground/10 pt-4 flex space-x-4">
-            {liveUrl && (
-              <a href={liveUrl} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 font-semibold text-foreground hover:text-accent transition-colors duration-200">
-                <ExternalLinkIcon className="w-5 h-5" />
-                Live Site
-              </a>
-            )}
-            {repoUrl && (
-              <a href={repoUrl} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 font-semibold text-foreground hover:text-accent transition-colors duration-200">
-                <GitHubIcon className="w-5 h-5" />
-                GitHub
-              </a>
-            )}
+          <div className="border-t border-foreground/10 pt-4">
+            <ProjectLinks liveUrl={liveUrl} repoUrl={repoUrl} />
           </div>
         </div>
       )}

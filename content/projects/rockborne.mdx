@@ -1,0 +1,184 @@
+---
+published: true
+title: "Data Training Programme"
+date: "2026-04-01"
+description: "An intensive private data training programme covering industry tools and end-to-end project workflows, with selected micro-project showcases."
+imageUrl: "/images/projects/rockborne/rockborne.webp"
+tags: ["Python", "SQL", "PostgreSQL", "Tableau", "Power BI", "Streamlit", "Excel", "Machine Learning", "APIs", "Data Modelling"]
+---
+
+# Introduction
+
+As part of my data upskilling mission, I have been accepted to and completed an intensive private data training programme.
+This has been useful to me as it introduced me to a variety of tools that I hadn't learnt in my degree, that are actaully used by companies, taught in a more efficient way.
+
+## About the Training
+
+The training was structured as a collection of projects relating to a particular tool or skill, with instructor-led classes preceeding them.
+Since these toy projects were intended for the sole purpose of learning, some were less notable than others, so this write-up contains only a selection.
+
+Here's a very brief outline of some of the tools/skills which were covered in the programme:
+
+<table>
+  <tbody>
+    <tr>
+      <td>**Soft Skills** (e.g. Data Storytelling)</td>
+      <td>**Excel**</td>
+    </tr>
+    <tr>
+      <td>**Data Modelling & SQL** (Postgres)</td>
+      <td>**Tableau**</td>
+    </tr>
+    <tr>
+      <td>**Power BI**</td>
+      <td>**Python** (Intermediate)</td>
+    </tr>
+    <tr>
+      <td>**Machine Learning** Basics</td>
+      <td>**APIs and Web Scraping**</td>
+    </tr>
+  </tbody>
+</table>
+
+Despite the (frustratingly) little utility these projects serve outside their primary purpose (learning); I feel it's important to note that they were all developed in a way which attempted to mimmick real projects. This means things such as:
+- **Researching the domain**
+- **Version control** (GitHub) for all code
+- **Comprehensive documentation** (data dictionaries, statements of work, use guidance)
+- **Presenting the project** at the end (some live, some recorded)
+
+More information about the training programme can be found <a href="https://rockborne.com/attract-train-deploy/" target="_blank" rel="noopener noreferrer">**here**</a>.
+
+## Personal Note
+
+This training is part of an attract-train-deploy business. This business model essentially means that the company provides unpaid training free of charge to the students (me), then attempts to place the students with clients as a data consultant, which is where the company takes their cut.
+
+As of writing this, I am still enrolled in the "advanced" part of the programme, which is where students continue self-learning as the company finds placements.
+However, due to the drawbacks of being involved in such a scheme, I am still **actively seeking a permanent data role** outside of this enterprise.
+
+---
+
+## Micro-Projects
+
+### Holiday Inspiration App
+
+<TagList items={["Streamlit", "Python", "APIs", "Web Scraping", "LLM Integration", "Live App"]} />
+
+<ProjectLinks
+  liveUrl="https://super-epic-holiday-inspo-app.streamlit.app/"
+  liveLabel="Live App"
+  repoUrl="https://github.com/Jamie-Packer/streamlit-holiday-planner"
+/>
+
+This project had the coolest outcome. It's a Streamlit app where a user can input a description of what they'd like from a holiday, to get suggested destinations with useful information such as weather, activities, and safety information.
+
+<FigureImage
+  src="/images/projects/rockborne/streamlit_demo.webp"
+  alt="Holiday Inspiration App demo"
+  caption="Animated demo of the Holiday Inspiration App."
+  width={3840}
+  height={2160}
+/>
+
+**In short:** it begins with a **context-stuffing** setup to have an LLM map a user description to a selection of three holiday destinations to choose from (out of a bespoke dataset of ~300 diverse locations). 
+After destinations are chosen, the app loads weather/activities/safety via an IO layer backed by DuckDB. DuckDB is the source of truth: data is read from there first, and on a miss the IO layer fetches it (API or scraper), stores it, then returns it.
+
+Here's a flowchart demonstrating how the application works at a high level:
+
+<FigureImage
+  src="/images/projects/rockborne/streamlit_flow.webp"
+  alt="Holiday Inspiration App data flow diagram"
+  caption="Holiday Inspiration App high level  diagram."
+  width={3840}
+  height={2160}
+/>
+
+For a real deployment I’d swap the in-container DuckDB file for a persistent database (e.g. Postgres) and add a TTL or scheduled refresh so cached API/scrape data doesn’t go stale. 
+It works now because the cache starts empty after each cold start on Streamlit Community Cloud.
+It would also be cool to upgrade from context-stuffing to proper retrieval-augmented generation (RAG) setup, which is something I'd like to explore but wasn't within the scope of this project.
+For more detail, just take a look at the <a href="https://github.com/Jamie-Packer/streamlit-holiday-planner" target="_blank" rel="noopener noreferrer">GitHub repo!</a>
+
+> Note: The map feature will stop working when I turn off the GCP billing/API key one day.
+
+---
+
+### Sports League Database
+
+<TagList items={["SQL", "PostgreSQL", "Data Modelling", "Databases", "GDPR Compliance"]} />
+
+Designed and implemented a local relational database for a fictional football league. It served as a good refresher on data modelling, (I only had one module on this at uni; see <a href="/projects/university#database-theory--design">Database Theory & Design</a>).
+
+<FigureImage
+  src="/images/projects/rockborne/db_erd.svg"
+  alt="Sports League Database ERD"
+  caption="Entity relationship diagram for the database."
+  width={3840}
+  height={2160}
+/>
+
+The schema itself was standard 3NF OLTP stuff (the ERD covers it). What I found more interesting was learning about *where* integrity and compliance should live.
+
+I included a mix of constraints and triggers into Postgres for data integrity, including some business logic rules (such as disallowing red carded players to later score in a match) that afterwards I learnt wouldn't live there in a production design (they'd be upstream).
+
+I also added an audit log and a player anonymisation procedure. That was the bit that connected most clearly to how this kind of system would need to behave under GDPR: scrub PII on request, keep the keys so historical match stats still work, and retain a trail of what changed.
+
+---
+
+### Local ETL & Power BI Dashboard
+
+<TagList items={["Python", "pandas", "ETL", "Power BI", "Data Visualisation", "Real Data"]} />
+
+<ProjectLinks
+  repoUrl="https://github.com/Jamie-Packer/uk-crime-etl"
+  repoLabel="Police Data ETL GitHub"
+/>
+
+This one was a two-parter: first a local Python ETL to build a dataset, then a Power BI dashboard using it. The topic was street-level crime data, enriched with population, deprivation, and economic data.
+
+> **Fun Fact:** The most crime-ridden places in the south east are Brighton city centre and gatwick airport.
+
+{/* WIP: replace with ETL data-flow diagram */}
+<FigureImage
+  src="/images/projects/rockborne/police-etl-dashboard.webp"
+  alt="UK Crime ETL data flow"
+  caption="ETL data-flow diagram and dashboard pages."
+  width={3840}
+  height={2160}
+/>
+
+**Part 1: the "ETL".** This was not production grade nor deployable (the [repo README](https://github.com/Jamie-Packer/uk-crime-etl) is honest about that). 
+It was a training deliverable: raw files dropped into `data/raw/`, staged through `staging` → `interim` → `processed` / `reporting`, with helper modules in `src/` and a Jupyter notebook as the orchestrator - (that last part was a brief requirement, not a design preference). 
+
+It has a clear grain (`lsoa_code × force × year_month × crime_category`), and a validation layer that gates each stage on failure.
+
+The interesting engineering parts were designing the staged architecture and handling the messy joins underneath. 
+For example police.uk flipped from different area codes mid-2023, population data lags the crime months, and missing coordinates get an `UNKNOWN` sentinel rather than being dropped so force-level totals stay honest. 
+
+**Part 2: the dashboard.** Two pages framed towards at a time-poor, non-technical audience (force leadership / crime analysis leads), so the UX is deliberately app-like: metric toggles (volume vs crimes per 1k), bookmarks, info tooltips, and a global reset.
+
+- **Overview:** point-in-time monitoring for a selected month: MoM / YoY KPIs, geographic hotspots, and force-level category mix.
+- **Further Context:** deeper cuts over a custom date range: seasonality, category drill-down (14 police.uk types rolled into four macro groups), and scatter views linking crime rates to socioeconomic variables.
+
+The dashboard side of this project was presented live.
+
+
+---
+
+### Tableau Dashboard
+
+<TagList items={["Tableau", "Data Visualisation", "Real Data"]} />
+
+This one was fairly simple, I was allowed to pick the data to work with, so I sourced data from a website which scrapes real airbnb listings (<a href="https://insideairbnb.com/" target="_blank" rel="noopener noreferrer">Inside Airbnb</a>) and enriched it slightly with some house price data to add context.
+The framing here is: *"if one was considering opening an airbnb in london, this could give them a feel for the market".*
+
+
+{/* WIP: dashboard image */}
+<FigureImage
+  src="/images/projects/rockborne/tableau-dashboard.webp"
+  alt="Tableau Airbnb dashboard"
+  caption="Tableau dashboard."
+  width={3840}
+  height={2160}
+/>
+
+This was the **first BI dashboard I made** so obviously there are some clear issues with it. 
+The metrics aren't reliable (so the last viz needs a large grain of salt), using line thickness to denote sample size probably isn't good for non-technicals, its not the most beautiful e.t.c. However it did serve as a good learning excercise, particularly when **I had to present it live**.
