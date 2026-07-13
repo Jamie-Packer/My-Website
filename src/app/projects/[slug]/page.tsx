@@ -3,11 +3,10 @@ import type { Metadata } from "next";
 import { getSortedContentData, getContentBySlug, ProjectMetadata } from '@/lib/content';
 import { MDXRemote } from 'next-mdx-remote/rsc';
 import Image from 'next/image';
-import ExternalLinkIcon from '@/components/icons/ExternalLinkIcon';
-import GitHubIcon from '@/components/icons/GitHubIcon';
 import { notFound } from 'next/navigation';
 import TableOfContents from '@/components/TableOfContents';
-import FigureImage from '@/components/FigureImage'; 
+import FigureImage from '@/components/FigureImage';
+import ProjectLinks from '@/components/ProjectLinks';
 
 // Make these available inside MDX:
 import TagList from '@/components/TagList';
@@ -56,6 +55,7 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
     TagList,
     YouTubeEmbed,
     FigureImage,
+    ProjectLinks,
   };
 
   return (
@@ -77,30 +77,12 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
               <TagList items={projectMetadata.tags} />
             ) : null}
 
-            <div className="flex flex-wrap gap-6 items-center mt-6">
-              {projectMetadata.liveUrl && (
-                <a
-                  href={projectMetadata.liveUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 font-semibold text-foreground hover:text-accent transition-colors duration-200"
-                >
-                  <ExternalLinkIcon className="w-5 h-5" />
-                  Live Site
-                </a>
-              )}
-              {projectMetadata.repoUrl && (
-                <a
-                  href={projectMetadata.repoUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 font-semibold text-foreground hover:text-accent transition-colors duration-200"
-                >
-                  <GitHubIcon className="w-5 h-5" />
-                  GitHub Repo
-                </a>
-              )}
-            </div>
+            <ProjectLinks
+              className="mt-6"
+              liveUrl={projectMetadata.liveUrl}
+              repoUrl={projectMetadata.repoUrl}
+              repoLabel="GitHub Repo"
+            />
           </div>
 
           <div className="mb-12">

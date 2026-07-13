@@ -10,6 +10,8 @@ type Props = {
   imgClassName?: string;
   width?: number;
   height?: number;
+  /** Skip Next.js optimization — required for animated GIF/WebP so frames are preserved */
+  unoptimized?: boolean;
 };
 
 export default function FigureImage({
@@ -20,6 +22,7 @@ export default function FigureImage({
   imgClassName = "",
   width = 800, // Default width if not provided
   height = 450, // Default height if not provided
+  unoptimized = false,
 }: Props) {
   return (
     <figure className={`my-6 ${className}`}>
@@ -28,6 +31,7 @@ export default function FigureImage({
         alt={alt}
         width={width}
         height={height}
+        unoptimized={unoptimized}
         className={`mx-auto rounded-lg shadow-lg ${imgClassName}`}
         style={{ width: '100%', height: 'auto' }} // Responsive behavior
       />

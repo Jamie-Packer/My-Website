@@ -29,8 +29,11 @@ export const metadata: Metadata = {
   description:
     "Jamie Packer — Data Science graduate. Projects, articles, and more.",
   icons: {
-    icon: "/icon.svg",
-    shortcut: "/favicon.png",
+    icon: [
+      { url: "/favicon.ico", sizes: "any" },
+      { url: "/favicon.png", type: "image/png", sizes: "256x256" },
+      { url: "/icon.svg", type: "image/svg+xml" },
+    ],
     apple: "/favicon.png",
   },
 };
