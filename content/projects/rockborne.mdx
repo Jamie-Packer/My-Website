@@ -2,7 +2,7 @@
 published: true
 title: "Data Training Programme"
 date: "2026-04-01"
-description: "An intensive private data training programme covering industry tools and end-to-end project workflows, with selected micro-project showcases."
+description: "An intensive private data training programme covering industry tools and end-to-end workflows, with a showcase of select training deliverables."
 imageUrl: "/images/projects/rockborne/rockborne.webp"
 tags: ["Python", "SQL", "PostgreSQL", "Tableau", "Power BI", "Streamlit", "Excel", "Machine Learning", "APIs", "Data Modelling"]
 ---
@@ -14,8 +14,8 @@ This has been useful to me as it introduced me to a variety of tools that I hadn
 
 ## About the Training
 
-The training was structured as a collection of projects relating to a particular tool or skill, with instructor-led classes preceeding them.
-Since these toy projects were intended for the sole purpose of learning, some were less notable than others, so this write-up contains only a selection.
+The training was structured as a collection of projects relating to a particular tool or skill, with instructor-led classes preceding them.
+These were toy projects (built for learning, not for real users) so this write-up contains only a selection of the more interesting ones.
 
 Here's a very brief outline of some of the tools/skills which were covered in the programme:
 
@@ -40,7 +40,7 @@ Here's a very brief outline of some of the tools/skills which were covered in th
   </tbody>
 </table>
 
-Despite the (frustratingly) little utility these projects serve outside their primary purpose (learning); I feel it's important to note that they were all developed in a way which attempted to mimmick real projects. This means things such as:
+Whilst these projects weren't useful outside their primary purpose (learning), but they were developed in a way that attempted to mimic real projects. That meant:
 - **Researching the domain**
 - **Version control** (GitHub) for all code
 - **Comprehensive documentation** (data dictionaries, statements of work, use guidance)
@@ -48,18 +48,14 @@ Despite the (frustratingly) little utility these projects serve outside their pr
 
 More information about the training programme can be found <a href="https://rockborne.com/attract-train-deploy/" target="_blank" rel="noopener noreferrer">**here**</a>.
 
-## Personal Note
+### Personal Note
 
-This training is part of an attract-train-deploy business. This business model essentially means that the company provides unpaid training free of charge to the students (me), then attempts to place the students with clients as a data consultant, which is where the company takes their cut.
+This training sits inside an attract-train-deploy model: unpaid training up front, then placement with clients as a data consultant.
 
-As of writing this, I am still enrolled in the "advanced" part of the programme, which is where students continue self-learning as the company finds placements.
-However, due to the drawbacks of being involved in such a scheme, I am still **actively seeking a permanent data role** outside of this enterprise.
-
----
-
-## Micro-Projects
+As of writing, I am still on the "advanced" track (self-learning while placements are found). I am also **actively seeking a permanent data role** outside this scheme.
 
 ---
+## Projects
 
 ### Holiday Inspiration App
 
@@ -90,15 +86,15 @@ Here's a flowchart demonstrating how the application works at a high level:
 <FigureImage
   src="/images/projects/rockborne/streamlit_flow.webp"
   alt="Holiday Inspiration App data flow diagram"
-  caption="Holiday Inspiration App high level  diagram."
+  caption="Holiday Inspiration App high-level diagram."
   width={3840}
   height={2160}
 />
 
 For a real deployment I’d swap the in-container DuckDB file for a persistent database (e.g. Postgres) and add a TTL or scheduled refresh so cached API/scrape data doesn’t go stale. 
 It works now because the cache starts empty after each cold start on Streamlit Community Cloud.
-It would also be cool to upgrade from context-stuffing to proper retrieval-augmented generation (RAG) setup, which is something I'd like to explore but wasn't within the scope of this project.
-For more detail, just take a look at the <a href="https://github.com/Jamie-Packer/streamlit-holiday-planner" target="_blank" rel="noopener noreferrer">GitHub repo!</a>
+A natural next step would be upgrading from context-stuffing to a proper retrieval-augmented generation (RAG) setup, which I'd like to explore but wasn't within the scope of this project.
+For more detail, take a look at the <a href="https://github.com/Jamie-Packer/streamlit-holiday-planner" target="_blank" rel="noopener noreferrer">GitHub repo</a>.
 
 > Note: The map feature will stop working when I turn off the GCP billing/API key one day.
 
@@ -108,7 +104,7 @@ For more detail, just take a look at the <a href="https://github.com/Jamie-Packe
 
 <TagList items={["SQL", "PostgreSQL", "Data Modelling", "Databases", "GDPR Compliance"]} />
 
-Designed and implemented a local relational database for a fictional football league. It served as a good refresher on data modelling, (I only had one module on this at uni; see <a href="/projects/university#database-theory--design">Database Theory & Design</a>).
+Designed and implemented a local relational database for a fictional football league. It served as a good refresher on data modelling (I only had one module on this at uni; see <a href="/projects/university#database-theory--design">Database Theory & Design</a>).
 
 <FigureImage
   src="/images/projects/rockborne/db_erd.svg"
@@ -137,7 +133,7 @@ I also added an audit log and a player anonymisation procedure. That was the bit
 
 This one was a two-parter: first a local Python ETL to build a dataset, then a Power BI dashboard using it. The topic was street-level crime data, enriched with population, deprivation, and economic data.
 
-> **Fun Fact:** The most crime-ridden places in the south east are Brighton city centre and gatwick airport.
+> **Fun Fact:** The most crime-ridden places in the south east are Brighton city centre and Gatwick airport.
 
 {/* WIP: replace with ETL data-flow diagram */}
 <FigureImage
@@ -156,7 +152,7 @@ It has a clear grain (`lsoa_code × force × year_month × crime_category`), and
 The interesting engineering parts were designing the staged architecture and handling the messy joins underneath. 
 For example police.uk flipped from different area codes mid-2023, population data lags the crime months, and missing coordinates get an `UNKNOWN` sentinel rather than being dropped so force-level totals stay honest. 
 
-**Part 2: the dashboard.** Two pages framed towards at a time-poor, non-technical audience (force leadership / crime analysis leads), so the UX is deliberately app-like: metric toggles (volume vs crimes per 1k), bookmarks, info tooltips, and a global reset.
+**Part 2: the dashboard.** Two pages framed for a time-poor, non-technical audience (force leadership / crime analysis leads), so the UX is deliberately app-like: metric toggles (volume vs crimes per 1k), bookmarks, info tooltips, and a global reset.
 
 - **Overview:** point-in-time monitoring for a selected month: MoM / YoY KPIs, geographic hotspots, and force-level category mix.
 - **Further Context:** deeper cuts over a custom date range: seasonality, category drill-down (14 police.uk types rolled into four macro groups), and scatter views linking crime rates to socioeconomic variables.
@@ -170,18 +166,17 @@ The dashboard side of this project was presented live.
 
 <TagList items={["Tableau", "Data Visualisation", "Real Data"]} />
 
-This one was fairly simple, I was allowed to pick the data to work with, so I sourced data from a website which scrapes real airbnb listings (<a href="https://insideairbnb.com/" target="_blank" rel="noopener noreferrer">Inside Airbnb</a>) and enriched it slightly with some house price data to add context.
-The framing here is: *"if one was considering opening an airbnb in london, this could give them a feel for the market".*
-
+This one was fairly simple. I was allowed to pick the data, so I sourced real Airbnb listings from <a href="https://insideairbnb.com/" target="_blank" rel="noopener noreferrer">Inside Airbnb</a> and enriched them slightly with house price data for context.
+The framing: *"if someone were considering opening an Airbnb in London, this could give them a feel for the market."*
 
 {/* WIP: dashboard image */}
 <FigureImage
   src="/images/projects/rockborne/tableau-dashboard.webp"
   alt="Tableau Airbnb dashboard"
-  caption="Tableau dashboard."
+  caption="Airbnb market overview dashboard built in Tableau."
   width={3840}
   height={2160}
 />
 
-This was the **first BI dashboard I made** so obviously there are some clear issues with it. 
-The metrics aren't reliable (so the last viz needs a large grain of salt), using line thickness to denote sample size probably isn't good for non-technicals, its not the most beautiful e.t.c. However it did serve as a good learning excercise, particularly when **I had to present it live**.
+This was the **first BI dashboard I made**, so there are clear limitations: some metrics aren't reliable (take the last viz with a large grain of salt), and using line thickness for sample size is a weak choice for non-technical audiences.
+That said, it was a useful learning exercise, particularly when presenting it live.

@@ -83,18 +83,25 @@ h1, h2, h3, h4, h5, h6 {
   --tw-prose-invert-td-borders: color-mix(in oklab, var(--foreground) 10%, transparent);
 }
 
-/* Prose link behavior: default = primary text; hover = accent */
+/* Prose link behavior: default = primary text; hover = accent.
+   :visited must come before :hover so a visited+hovered link stays accent
+   (equal specificity otherwise lets :visited win and leave text white). */
 .prose :where(a) {
   color: var(--foreground);
   text-decoration-color: color-mix(in oklab, var(--foreground) 40%, transparent);
+}
+.prose :where(a:visited) {
+  color: var(--foreground);
 }
 .prose :where(a:hover) {
   color: var(--accent);
   text-decoration-color: var(--accent);
 }
-/* Optional: keep visited links the same as default */
-.prose :where(a:visited) {
-  color: var(--foreground);
+/* Bold/code inside links set their own color via prose tokens; inherit on hover */
+.prose :where(a:hover strong),
+.prose :where(a:hover b),
+.prose :where(a:hover code) {
+  color: inherit;
 }
 
 /* Custom animations (unchanged) */
