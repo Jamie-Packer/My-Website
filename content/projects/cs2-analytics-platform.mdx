@@ -1,0 +1,131 @@
+---
+published: true
+title: "[WIP] Counter-Strike Analytics Platform"
+date: "2026-07-19"
+description: "[Work in Progress] An event-driven, serverless analytics platform on GCP that parses Counter-Strike match demos into per-match stats. MVP pipeline live."
+imageUrl: "/images/projects/cs2-analytics-platform/cs2-analytics-platform.webp"
+tags: ["Google Cloud Platform", "Data Engineering", "Event-Driven Architecture", "Python", "Counter-Strike"]
+---
+
+# Counter-Strike Analytics Platform
+
+*Working title: CS-Bait* (referencing using ones teammates as "bait", hence the fishing rod, lol). Final name and domain TBD; <a href="https://cs-bait.vercel.app/" target="_blank" rel="noopener noreferrer">the live demo currently sits on a temporary Vercel URL</a>. 
+
+**Status:** Work in progress. The MVP pipeline is live end-to-end. Richer stats, Steam integration, and product polish are still ahead.
+
+The source is private while the product is in development. Architecture and design choices are documented here instead of a public repo.
+
+---
+
+## What is this?
+
+Most Counter-Strike analytics tools take a match recording (known as a “demo” file - a replay of everything that happened in a game) and produce personal performance stats: kills, deaths, accuracy, and so on.
+
+This project uses the same kind of data, but with a particular angle: how selfishly someone played. The long-term goal is a light-hearted analytics product that pokes fun at less-altruistic players.
+
+It is partly a cloud data-engineering learning project, and partly something I want friends (and eventually other players) to actually use.
+
+<FigureImage
+  src="/images/projects/cs2-analytics-platform/cs-bait-alpha-01.webp"
+  alt="Screenshot of the CS-Bait match results page"
+  caption="Early landing page before a demo has been uploaded."
+  width={1585}
+  height={909}
+/>
+
+---
+
+## How it works today
+
+The MVP pipeline:
+
+1. A user uploads a match recording from the browser
+2. The file lands in cloud storage via a presigned URL
+3. Object finalize triggers Pub/Sub
+4. A Cloud Run worker parses the demo and extracts stats
+5. The frontend polls for status, then shows a match page when results are ready
+
+Upload → storage event → queue → processor → results.
+
+<FigureImage
+  src="/images/projects/cs2-analytics-platform/alpha-diagram.webp"
+  alt="High-level architecture diagram of the CS-Bait MVP pipeline"
+  caption="MVP architecture: browser upload → GCS → Pub/Sub → Cloud Run → Silver results."
+  width={6887}
+  height={2877}
+/>
+
+
+---
+
+## Architecture
+
+An **event-driven, serverless data pipeline on Google Cloud Platform**, loosely following a **medallion / lakehouse** pattern:
+
+<table>
+  <thead>
+    <tr>
+      <th>Layer</th>
+      <th>What lives there</th>
+      <th>Role</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>**Bronze**</td>
+      <td>Raw uploaded demo files</td>
+      <td>Temporary landing zone</td>
+    </tr>
+    <tr>
+      <td>**Silver**</td>
+      <td>Per-match JSON results</td>
+      <td>Frontend-ready analytics payload</td>
+    </tr>
+    <tr>
+      <td>**Gold** *(planned)*</td>
+      <td>Aggregated cross-match insights</td>
+      <td>Leaderboards, trends, recurring patterns</td>
+    </tr>
+  </tbody>
+</table>
+
+### Current MVP stack
+
+- **Frontend:** Next.js (App Router) on Vercel
+- **Upload path:** Presigned URL to GCS (the app server does not shuttle large files)
+- **Storage:** GCS buckets for raw demos, job status, and processed results
+- **Messaging:** Pub/Sub on object finalize, with push delivery and a dead-letter queue
+- **Compute:** Cloud Run (Python / FastAPI), scale-to-zero when idle
+- **Parsing / analytics:** `demoparser2` for demo parsing, Polars for feature extraction
+- **Module boundaries:** parse → intermediate model → feature extraction → orchestration / I/O
+
+### Design choices
+
+- **Two IDs:** an `uploadId` for job tracking, and a content `fingerprint` (checksum + size) for dedupe and the final match URL
+- **Schema versioning** on Silver results, so outputs can be reprocessed when the analytics model changes
+- **Fingerprint-level duplicate handling:** the same file is not fully reprocessed if a current result already exists
+- **Raw demos are deleted after processing** (with a Bronze lifecycle safety net) to keep storage costs down
+- **Results can be fetched directly from GCS**, so the match page does not need to go through the app server
+- **Cost-aware defaults:** scale-to-zero compute and a lean container, so idle time does not burn money
+
+---
+
+## What’s next
+
+### 1. Richer match analytics
+
+Current Silver output is intentionally basic. It's enough to show parse → extract → serve. Next is deeper feature extraction: stronger behavioural / “teamplay” signals, better per-player stats, and a scoring model that supports that angle.
+
+### 2. Steam auth + automatic demo ingestion
+
+Manual upload worked for the MVP, but demo files are large and high-friction to upload every match. The plan is Steam auth plus backend demo download / ingestion, so processing becomes a background job and the frontend can focus on match history rather than an upload-and-poll loop.
+
+### 3. Less frontend polling
+
+Polling exists because the browser owns the upload today. Once demos arrive server-side, status can live in account-backed history instead of a temporary upload-status dance.
+
+### 4. Gold layer (later)
+
+Once richer Silver results accumulate across authenticated users, a Gold layer can produce cross-match insights. Implementation is still open; the priority for now is keeping Silver clean and consistent.
+
+---
