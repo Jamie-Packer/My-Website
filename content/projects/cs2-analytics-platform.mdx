@@ -1,43 +1,58 @@
 ---
 published: true
-title: "[WIP] Counter-Strike Analytics Platform"
-date: "2026-07-19"
-description: "[Work in Progress] An event-driven, serverless analytics platform on GCP that parses Counter-Strike match demos into per-match stats. MVP pipeline live."
+title: "Counter-Strike Analytics Platform"
+date: "2026-07-30"
+description: "An event-driven, serverless analytics platform on GCP that parses Counter-Strike demos into deep per-match stats. Pipeline, frontend, and CI/CD are live."
 imageUrl: "/images/projects/cs2-analytics-platform/cs2-analytics-platform.webp"
-tags: ["Google Cloud Platform", "Data Engineering", "Event-Driven Architecture", "Python", "Counter-Strike"]
----
-
-# Counter-Strike Analytics Platform
-
-*Working title: CS-Bait* (referencing using ones teammates as "bait", hence the fishing rod, lol). Final name and domain TBD; <a href="https://cs-bait.vercel.app/" target="_blank" rel="noopener noreferrer">the live demo currently sits on a temporary Vercel URL</a>. 
-
-**Status:** Work in progress. The MVP pipeline is live end-to-end. Richer stats, Steam integration, and product polish are still ahead.
-
-The source is private while the product is in development. Architecture and design choices are documented here instead of a public repo.
-
+liveUrl: "https://cs-bait.vercel.app/"
+tags: ["Google Cloud Platform", "Data Engineering", "Event-Driven Architecture", "Python", "CI/CD", "Counter-Strike"]
 ---
 
 ## What is this?
 
-Most Counter-Strike analytics tools take a match recording (known as a “demo” file - a replay of everything that happened in a game) and produce personal performance stats: kills, deaths, accuracy, and so on.
+Most Counter-Strike analytics tools take a match recording (known as a “demo” file, a replay of everything that happened in a game) and produce personal performance stats: kills, deaths, accuracy, and so on.
 
-This project uses the same kind of data, but with a particular angle: how selfishly someone played. The long-term goal is a light-hearted analytics product that pokes fun at less-altruistic players.
+This project uses the same data and presents many of the same stats, but with some much more bespoke ones too, aimed at further quantifying a player’s *style* of play. The long-term goal is a light-hearted analytics product that pokes fun at less-altruistic players.
 
-It is partly a cloud data-engineering learning project, and partly something I want friends (and eventually other players) to actually use.
+It is partly a cloud data-engineering learning project, and partly something I want friends (and potentially other players) to actually use. It also sits downstream of my earlier [behavioural modelling work](/projects/cs2-behavioural-profiling): that project asked whether playstyle is measurable; this one is about shipping the pipeline and product surface that could make use of those ideas.
+
+Working title: **CS-Bait** (referencing using one’s teammates as “bait”). Final name and domain are TBD; the live demo currently sits on a temporary Vercel URL (linked above). The source is private, so architecture and design choices are documented here instead of a public repo.
+
+**Status:** Work in progress. The end-to-end pipeline is live, with automated tests, automatic deploys, and match pages that surface stats you do not get from the in-game scoreboard (nor from existing similar platforms). Steam integration, a better Legendaryness model, and richer playstyle metrics are still ahead.
 
 <FigureImage
   src="/images/projects/cs2-analytics-platform/cs-bait-alpha-01.webp"
-  alt="Screenshot of the CS-Bait match results page"
-  caption="Early landing page before a demo has been uploaded."
+  alt="Screenshot of the CS-Bait landing page before a demo has been uploaded"
+  caption="Early landing page: pick a .dem and kick off the pipeline."
   width={1585}
   height={909}
 />
+
+{/*
+  Demo animation placeholder. Drop the sped-up webp at:
+  public/images/projects/cs2-analytics-platform/upload-to-match-demo.webp
+  then uncomment the FigureImage below (unoptimized keeps animation frames).
+*/}
+{/* TODO: replace this note with the FigureImage once the webp exists */}
+
+*Demo animation coming soon: a sped-up walkthrough of uploading a `.dem` and poking around the match page.*
+
+{/*
+<FigureImage
+  src="/images/projects/cs2-analytics-platform/upload-to-match-demo.webp"
+  alt="Sped-up walkthrough of uploading a demo and exploring the match page"
+  caption="Upload → processing → match page (sped up)."
+  width={1920}
+  height={1080}
+  unoptimized
+/>
+*/}
 
 ---
 
 ## How it works today
 
-The MVP pipeline:
+The live pipeline:
 
 1. A user uploads a match recording from the browser
 2. The file lands in cloud storage via a presigned URL
@@ -47,6 +62,8 @@ The MVP pipeline:
 
 Upload → storage event → queue → processor → results.
 
+Beyond the usual K/D/ADR, the match page surfaces side-split views of opening attempts, first-contact timing, losses survived (“saves”), and last-alive-on-wipe counts, plus a per-round timeline, a round-by-round opening-duel log, and a **Legendaryness** score (v0.1, computed in the browser today) that ranks how aggressively someone threw themselves into the fight. That kind of depth is not available from the game UI after a match; it has to be reconstructed from the demo.
+
 <FigureImage
   src="/images/projects/cs2-analytics-platform/alpha-diagram.webp"
   alt="High-level architecture diagram of the CS-Bait MVP pipeline"
@@ -54,7 +71,6 @@ Upload → storage event → queue → processor → results.
   width={6887}
   height={2877}
 />
-
 
 ---
 
@@ -82,14 +98,21 @@ An **event-driven, serverless data pipeline on Google Cloud Platform**, loosely 
       <td>Frontend-ready analytics payload</td>
     </tr>
     <tr>
+      <td>**OLTP** *(planned)*</td>
+      <td>Users, jobs, match index, fact rows</td>
+      <td>App database for Steam-era product state (not a medallion tier)</td>
+    </tr>
+    <tr>
       <td>**Gold** *(planned)*</td>
       <td>Aggregated cross-match insights</td>
-      <td>Leaderboards, trends, recurring patterns</td>
+      <td>Leaderboards, trends, career rollups</td>
     </tr>
   </tbody>
 </table>
 
-### Current MVP stack
+Silver is the per-match document store today. An OLTP database comes first once Steam auth lands (users, ingestion jobs, and SQL-friendly facts). Gold can then be derived from those facts; a warehouse copy is optional later and is not on the parse hot path.
+
+### Current stack
 
 - **Frontend:** Next.js (App Router) on Vercel
 - **Upload path:** Presigned URL to GCS (the app server does not shuttle large files)
@@ -98,6 +121,7 @@ An **event-driven, serverless data pipeline on Google Cloud Platform**, loosely 
 - **Compute:** Cloud Run (Python / FastAPI), scale-to-zero when idle
 - **Parsing / analytics:** `demoparser2` for demo parsing, Polars for feature extraction
 - **Module boundaries:** parse → intermediate model → feature extraction → orchestration / I/O
+- **CI/CD:** GitHub Actions: unit tests on PR/push; on `main`, build/push the image to Artifact Registry and deploy Cloud Run
 
 ### Design choices
 
@@ -112,20 +136,10 @@ An **event-driven, serverless data pipeline on Google Cloud Platform**, loosely 
 
 ## What’s next
 
-### 1. Richer match analytics
+### 1. Steam auth + OLTP
 
-Current Silver output is intentionally basic. It's enough to show parse → extract → serve. Next is deeper feature extraction: stronger behavioural / “teamplay” signals, better per-player stats, and a scoring model that supports that angle.
+Manual upload worked for the MVP, but demos are large and high-friction to upload every match. Steam auth plus backend demo download would make the product much easier to use, and it needs an app database for users, jobs, and a match index. I am leaning toward **Neon** (serverless Postgres) over always-on Cloud SQL or a document store that fights SQL aggregates. Match pages would keep serving Silver JSON from GCS; the OLTP would hold pointers and compact fact rows. Once demos arrive server-side, status can live in account-backed history instead of the temporary upload-status polling the browser owns today. A Gold / warehouse layer stays optional and later.
 
-### 2. Steam auth + automatic demo ingestion
+### 2. Legendaryness and playstyle depth
 
-Manual upload worked for the MVP, but demo files are large and high-friction to upload every match. The plan is Steam auth plus backend demo download / ingestion, so processing becomes a background job and the frontend can focus on match history rather than an upload-and-poll loop.
-
-### 3. Less frontend polling
-
-Polling exists because the browser owns the upload today. Once demos arrive server-side, status can live in account-backed history instead of a temporary upload-status dance.
-
-### 4. Gold layer (later)
-
-Once richer Silver results accumulate across authenticated users, a Gold layer can produce cross-match insights. Implementation is still open; the priority for now is keeping Silver clean and consistent.
-
----
+Legendaryness v0.1 already ships on the match page (Legends/Losers tab), but it is still a rough client-side score. Next steps are to harden that model, move the computation into the backend so Silver carries the result, and add more bespoke playstyle / role-centric metrics that further set the product apart from existing platforms.
