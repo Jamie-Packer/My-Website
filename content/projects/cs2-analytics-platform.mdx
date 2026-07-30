@@ -14,39 +14,21 @@ Most Counter-Strike analytics tools take a match recording (known as a “demo�
 
 This project uses the same data and presents many of the same stats, but with some much more bespoke ones too, aimed at further quantifying a player’s *style* of play. The long-term goal is a light-hearted analytics product that pokes fun at less-altruistic players.
 
-It is partly a cloud data-engineering learning project, and partly something I want friends (and potentially other players) to actually use. It also sits downstream of my earlier [behavioural modelling work](/projects/cs2-behavioural-profiling): that project asked whether playstyle is measurable; this one is about shipping the pipeline and product surface that could make use of those ideas.
+It is partly a cloud data-engineering learning project, and partly something I want friends (and potentially other players) to actually use. It also sits downstream of my earlier [behavioural modelling work](/projects/cs2-behavioural-profiling): that project asked whether playstyle is measurable; this one is about shipping the pipeline and product surface that can make use of those ideas.
 
 Working title: **CS-Bait** (referencing using one’s teammates as “bait”). Final name and domain are TBD; the live demo currently sits on a temporary Vercel URL (linked above). The source is private, so architecture and design choices are documented here instead of a public repo.
 
 **Status:** Work in progress. The end-to-end pipeline is live, with automated tests, automatic deploys, and match pages that surface stats you do not get from the in-game scoreboard (nor from existing similar platforms). Steam integration, a better Legendaryness model, and richer playstyle metrics are still ahead.
 
 <FigureImage
-  src="/images/projects/cs2-analytics-platform/cs-bait-alpha-01.webp"
-  alt="Screenshot of the CS-Bait landing page before a demo has been uploaded"
-  caption="Early landing page: pick a .dem and kick off the pipeline."
-  width={1585}
-  height={909}
-/>
-
-{/*
-  Demo animation placeholder. Drop the sped-up webp at:
-  public/images/projects/cs2-analytics-platform/upload-to-match-demo.webp
-  then uncomment the FigureImage below (unoptimized keeps animation frames).
-*/}
-{/* TODO: replace this note with the FigureImage once the webp exists */}
-
-*Demo animation coming soon: a sped-up walkthrough of uploading a `.dem` and poking around the match page.*
-
-{/*
-<FigureImage
-  src="/images/projects/cs2-analytics-platform/upload-to-match-demo.webp"
+  src="/images/projects/cs2-analytics-platform/demo1.webp"
   alt="Sped-up walkthrough of uploading a demo and exploring the match page"
   caption="Upload → processing → match page (sped up)."
   width={1920}
   height={1080}
   unoptimized
 />
-*/}
+
 
 ---
 
