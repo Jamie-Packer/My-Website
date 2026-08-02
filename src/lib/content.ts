@@ -71,6 +71,18 @@ export async function getSortedContentData<
 }
 
 /**
+ * All content slugs on disk, including `published: false`.
+ * Useful for static params when hidden pages are still linked directly.
+ */
+export async function getAllContentSlugs(type: Kind): Promise<string[]> {
+  const files = await fs.readdir(dirFor(type));
+  return files
+    .filter((file) => file.endsWith(".mdx"))
+    .map((file) => file.slice(0, -4))
+    .filter((slug) => /^[a-z0-9-]+$/.test(slug));
+}
+
+/**
  * Load a single entry by slug. Does not check `published`,
  * so hidden items remain accessible via direct URL.
  * Returns null only if the file does not exist.
