@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { getSortedContentData, getContentBySlug, ArticleMetadata } from '@/lib/content';
+import { getAllContentSlugs, getContentBySlug, ArticleMetadata } from '@/lib/content';
 import { MDXRemote } from 'next-mdx-remote/rsc';
 import YouTubeEmbed from '@/components/YouTubeEmbed';
 import TagList from "@/components/TagList";
@@ -8,10 +8,9 @@ import FigureImage from '@/components/FigureImage';
 import MDXLink from '@/components/MDXLink';
 
 export async function generateStaticParams() {
-  const articles = await getSortedContentData<ArticleMetadata>('articles');
-  return articles.map((article) => ({
-    slug: article.slug,
-  }));
+  // Include unpublished articles so direct/hero links still pre-render.
+  const slugs = await getAllContentSlugs("articles");
+  return slugs.map((slug) => ({ slug }));
 }
 
 export async function generateMetadata({

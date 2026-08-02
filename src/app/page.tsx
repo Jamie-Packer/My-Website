@@ -1,9 +1,9 @@
 // src/app/page.tsx
 import Link from 'next/link';
-import Image from 'next/image';
 import GitHubIcon from '@/components/icons/GitHubIcon';
 import LinkedInIcon from '@/components/icons/LinkedInIcon';
 import EmailIcon from '@/components/icons/EmailIcon';
+import HeroPortrait from '@/components/HeroPortrait';
 
 
 const HomePage = () => {
@@ -12,15 +12,7 @@ const HomePage = () => {
 
       {/* Hero Section */}
       <section id="hero" className="grid grid-cols-1 md:grid-cols-2 min-h-screen">
-        <div className="bg-background hidden md:block relative">
-          <Image
-            src="/images/home/home_image.webp"
-            alt="Hero Background"
-            fill
-            className="object-cover"
-            priority
-          />
-        </div>
+        <HeroPortrait />
 
         <div className="flex flex-col justify-center items-center md:items-start text-center md:text-left p-8">
           <h1 className="font-heading text-4xl sm:text-5xl lg:text-6xl font-bold mb-4">
@@ -51,7 +43,7 @@ const HomePage = () => {
         </a>
 
         <div className="container mx-auto max-w-4xl">
-          <div className="flex flex-col md:flex-row md:items-start md:gap-12">
+          <div className="flex flex-col md:flex-row md:items-center md:gap-12">
             <div className="md:flex-1 md:min-w-0 mb-8 md:mb-0">
               <h2 className="font-heading text-3xl font-bold mb-6">About Me</h2>
               <p className="text-foreground2 mb-8 text-lg">
@@ -85,12 +77,6 @@ const HomePage = () => {
                 className="block w-full bg-background hover:brightness-125 text-foreground font-bold py-3 px-6 rounded-md transition-colors duration-200 text-center"
               >
                 My Projects
-              </Link>
-              <Link
-                href="/articles"
-                className="block w-full bg-background hover:brightness-125 text-foreground font-bold py-3 px-6 rounded-md transition-colors duration-200 text-center"
-              >
-                My Articles
               </Link>
             </div>
           </div>
