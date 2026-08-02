@@ -4,20 +4,27 @@ title: "Data Training Programme"
 date: "2026-04-01"
 description: "An intensive private data training programme covering industry tools and end-to-end workflows, with a showcase of select training deliverables."
 imageUrl: "/images/projects/rockborne/rockborne.webp"
-tags: ["Python", "SQL", "Tableau", "Power BI", "Streamlit", "APIs", "Data Modelling"]
+tags: ["Python", "SQL", "Snowflake", "dbt", "Terraform", "Power BI", "Tableau", "Streamlit", "Excel"]
 ---
 
 # Introduction
 
-As part of my data upskilling mission, I have been accepted to and completed an intensive private data training programme.
-This has been useful to me as it introduced me to a variety of tools that I hadn't learnt in my degree, that are actaully used by companies, taught in a more efficient way.
+I completed an intensive private data training programme (Rockborne) covering industry tools and end-to-end workflows that my degree did not cover.
 
-## About the Training
+Below are selected deliverables from the programme which showcase the skills learnt as a result the programme.
 
-The training was structured as a collection of projects relating to a particular tool or skill, with instructor-led classes preceding them.
-These were toy projects (built for learning, not for real users) so this write-up contains only a selection of the more interesting ones.
+### Personal Note
 
-Here's a very brief outline of some of the tools/skills which were covered in the programme:
+This training sits inside an attract-train-deploy model: unpaid training up front, then placement with clients as a data consultant.
+
+As of writing, I am still on the "advanced" track (self-learning while placements are found). I am also **actively seeking a permanent data role** outside this scheme.
+
+<details>
+  <summary className="cursor-pointer text-2xl font-heading">About the Training</summary>
+
+The programme was structured as instructor-led classes followed by projects for a particular tool or skill. This page covers a selection of those deliverables.
+
+Tools and skills covered:
 
 <table>
   <tbody>
@@ -40,22 +47,58 @@ Here's a very brief outline of some of the tools/skills which were covered in th
   </tbody>
 </table>
 
-Whilst these projects weren't useful outside their primary purpose (learning), but they were developed in a way that attempted to mimic real projects. That meant:
+Projects were built for learning, but scoped to mimic client-style work:
 - **Researching the domain**
 - **Version control** (GitHub) for all code
-- **Comprehensive documentation** (data dictionaries, statements of work, use guidance)
+- **Documentation** (data dictionaries, statements of work, use guidance)
 - **Presenting the project** at the end (some live, some recorded)
 
-More information about the training programme can be found <a href="https://rockborne.com/attract-train-deploy/" target="_blank" rel="noopener noreferrer">**here**</a>.
+More about the programme: <a href="https://rockborne.com/attract-train-deploy/" target="_blank" rel="noopener noreferrer">**Rockborne Attract-Train-Deploy**</a>.
 
-### Personal Note
-
-This training sits inside an attract-train-deploy model: unpaid training up front, then placement with clients as a data consultant.
-
-As of writing, I am still on the "advanced" track (self-learning while placements are found). I am also **actively seeking a permanent data role** outside this scheme.
+</details>
 
 ---
 ## Projects
+
+### UK Crime ELT & Power BI Dashboard
+
+<TagList items={["Snowflake", "dbt", "Terraform", "Python", "Power BI", "ELT"]} />
+
+<ProjectLinks
+  repoUrl="https://github.com/Jamie-Packer/snowflake-uk-crime-elt"
+  repoLabel="Snowflake ELT GitHub"
+/>
+
+This started as a Rockborne two-parter: a (local) Python ETL over street-level crime data (enriched with population, deprivation, and economic activity), then a Power BI dashboard using the result. Grain throughout: `area × force × year_month × crime_category`.
+
+The training pipeline had some honest limits (file stages on disk, Jupyter as orchestrator because the brief required it, not deployable). After the programme I rebuilt it as a more production-shaped **ELT** on Snowflake: land raw data first, transform in the warehouse.
+
+<FigureImage
+  src="/images/projects/rockborne/snowflake-elt-diagram.webp"
+  alt="UK Crime Snowflake ELT architecture diagram"
+  caption="High-level ELT: ingest → Snowflake bronze/silver/gold → Power BI."
+  width={3840}
+  height={2160}
+/>
+
+**What I rebuilt.** Python extracts and loads (police.uk archives plus committed enrichments into bronze). **dbt** handles bronze → silver → gold in Snowflake (star schema plus a denormalised one-big-table for BI). **Terraform** provisions the database, schemas, warehouse, and stages. Bootstrap and monthly refresh run from the client or **GitHub Actions**.
+
+Some source reality: police.uk switched their area codes mid-2023 (hard floor `2023-06`), population lags crime months, and missing location codes become an `UNKNOWN` sentinel so force-level totals can stay honest. dbt tests assert uniqueness on the reporting grain.
+
+**The dashboard** (training deliverable, presented live) was framed for a "time-poor, non-technical audience" (force leadership / crime analysis leads). UX is deliberately app-like: volume vs crimes-per-1k toggles, bookmarks, tooltips, and a global reset.
+
+> **Fun Fact:** The most crime-ridden place in south-east England is Brighton city centre (by far).
+
+
+<FigureImage
+  src="/images/projects/rockborne/powerbi-dashboard.webp"
+  alt="UK Crime Power BI dashboard"
+  caption="Power BI dashboard: Overview and Further Context pages."
+  width={1920}
+  height={2160}
+/>
+
+---
 
 ### Holiday Inspiration App
 
@@ -119,46 +162,6 @@ The schema itself was standard 3NF OLTP stuff (the ERD covers it). What I found 
 I included a mix of constraints and triggers into Postgres for data integrity, including some business logic rules (such as disallowing red carded players to later score in a match) that afterwards I learnt wouldn't live there in a production design (they'd be upstream).
 
 I also added an audit log and a player anonymisation procedure. That was the bit that connected most clearly to how this kind of system would need to behave under GDPR: scrub PII on request, keep the keys so historical match stats still work, and retain a trail of what changed.
-
----
-
-### Local ETL & Power BI Dashboard
-
-<TagList items={["Python", "pandas", "ETL", "Power BI", "Data Visualisation", "Real Data"]} />
-
-<ProjectLinks
-  repoUrl="https://github.com/Jamie-Packer/uk-crime-etl"
-  repoLabel="Police Data ETL GitHub"
-/>
-
-This one was a two-parter: first a local Python ETL to build a dataset, then a Power BI dashboard using it. The topic was street-level crime data, enriched with population, deprivation, and economic data.
-
-> **Fun Fact:** The most crime-ridden places in the south east are Brighton city centre and Gatwick airport.
-
-{/* WIP: replace with ETL data-flow diagram */}
-<FigureImage
-  src="/images/projects/rockborne/police-etl-dashboard.webp"
-  alt="UK Crime ETL data flow"
-  caption="ETL data-flow diagram and dashboard pages."
-  width={3840}
-  height={2160}
-/>
-
-**Part 1: the "ETL".** This was not production grade nor deployable (the [repo README](https://github.com/Jamie-Packer/uk-crime-etl) is honest about that). 
-It was a training deliverable: raw files dropped into `data/raw/`, staged through `staging` → `interim` → `processed` / `reporting`, with helper modules in `src/` and a Jupyter notebook as the orchestrator - (that last part was a brief requirement, not a design preference). 
-
-It has a clear grain (`lsoa_code × force × year_month × crime_category`), and a validation layer that gates each stage on failure.
-
-The interesting engineering parts were designing the staged architecture and handling the messy joins underneath. 
-For example police.uk flipped from different area codes mid-2023, population data lags the crime months, and missing coordinates get an `UNKNOWN` sentinel rather than being dropped so force-level totals stay honest. 
-
-**Part 2: the dashboard.** Two pages framed for a time-poor, non-technical audience (force leadership / crime analysis leads), so the UX is deliberately app-like: metric toggles (volume vs crimes per 1k), bookmarks, info tooltips, and a global reset.
-
-- **Overview:** point-in-time monitoring for a selected month: MoM / YoY KPIs, geographic hotspots, and force-level category mix.
-- **Further Context:** deeper cuts over a custom date range: seasonality, category drill-down (14 police.uk types rolled into four macro groups), and scatter views linking crime rates to socioeconomic variables.
-
-The dashboard side of this project was presented live.
-
 
 ---
 
