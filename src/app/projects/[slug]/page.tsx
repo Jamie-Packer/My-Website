@@ -11,6 +11,7 @@ import ProjectLinks from '@/components/ProjectLinks';
 // Make these available inside MDX:
 import TagList from '@/components/TagList';
 import YouTubeEmbed from '@/components/YouTubeEmbed';
+import PlotlyEmbed from '@/components/PlotlyEmbed';
 import MDXLink from '@/components/MDXLink';
 
 export async function generateStaticParams() {
@@ -54,6 +55,7 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
     a: MDXLink,
     TagList,
     YouTubeEmbed,
+    PlotlyEmbed,
     FigureImage,
     ProjectLinks,
   };

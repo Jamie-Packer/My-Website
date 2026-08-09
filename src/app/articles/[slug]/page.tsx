@@ -5,6 +5,7 @@ import YouTubeEmbed from '@/components/YouTubeEmbed';
 import TagList from "@/components/TagList";
 import { notFound } from 'next/navigation';
 import FigureImage from '@/components/FigureImage';
+import PlotlyEmbed from '@/components/PlotlyEmbed';
 import MDXLink from '@/components/MDXLink';
 
 export async function generateStaticParams() {
@@ -46,6 +47,7 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
   const components = {
     a: MDXLink,
     YouTubeEmbed,
+    PlotlyEmbed,
     TagList,
     FigureImage,
   };
