@@ -18,6 +18,7 @@ tags: ["Data Analysis", "Machine Learning", "Feature Engineering", "Statistics",
 *   **Data Processing & Feature Engineering:** Processed over 1,000 match replay files (>400GB) to engineer a robust dataset of behavioural features, representing aspects of 'playstyle' such as aggression, trading, and positioning.
 *   **Quantifying Behaviour:** Used statistical analysis (including **visualisation, hypothesis testing and regression analysis**) to formally model behavioural differences across roles, providing empirical validation for domain intuition (e.g. verifying how specific roles differ in positioning).
 *   **Role Classification:** Developed a supervised learning model as a proof-of-concept for automating role labelling. Achieved **~0.92 (T-Side), ~0.76 (CT-Side) F1-Macro scores**, demonstrating that player roles are statistically distinct and enabling the algorithmic identification of mislabelled data.
+*   **Cluster Analysis:** Unsupervised clustering (no role labels used in fitting) recovered groups that align with expert roles, with clearer structure on T-side than CT-side. This validates that these "roles" have real statistical backing in the data, even with just **6 behavioural features**.
 
 ---
 
@@ -58,29 +59,53 @@ The core philosophy of this feature set was to quantify **style**, not **skill**
 Most available statistics (K/D ratio, ADR, Win %) measure *performance*. I deliberately excluded these to ensure that a "good" Anchor and a "bad" Anchor would still be grouped together based on *how* they played, rather than their success.
 
 **Constraint:** I explicitly excluded the potential feature "% of kills with sniper rifles".
-While this would have made classification for this class trivial (AWPers (snipers) use AWPs (sniper rifles)), it would have masked the underlying behavioural patterns. I wanted to see if the model could identify an AWPer purely by *how they behave*, not just by the gun they hold.
+Whilst this would have considerably improved classification scores, out of research interest I wanted to see if the model could identify an AWPer purely by *how they behave*, not just by the gun they hold.
 
 I engineered three categories of behavioural features:
 
-**Aggression:**
-    *   `TAPD` (Time Alive Per Death): Do they die early or survive late?
-    *   `OAP` (Opening Attempt %): How often do they take the first duel of the round?
+<table>
+  <thead>
+    <tr>
+      <th>Category</th>
+      <th>Feature</th>
+      <th>Captures</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td rowspan="2"><strong>Aggression</strong></td>
+      <td><code>TAPD</code> (Time Alive Per Death)</td>
+      <td>Do they die early or survive late?</td>
+    </tr>
+    <tr>
+      <td><code>OAP</code> (Opening Attempt %)</td>
+      <td>How often do they take the first duel of the round?</td>
+    </tr>
+    <tr>
+      <td rowspan="2"><strong>Teamwork (Trading)</strong></td>
+      <td><code>PODT</code> (Proportion of Deaths Traded)</td>
+      <td>When they die, is a teammate close enough to avenge them?</td>
+    </tr>
+    <tr>
+      <td><code>POKT</code> (Proportion of Kills which were Trades)</td>
+      <td>Are they the ones doing the avenging?</td>
+    </tr>
+    <tr>
+      <td rowspan="2"><strong>Positioning (Novel)</strong></td>
+      <td><code>ADNT</code> (Avg Distance to Nearest Teammate)</td>
+      <td>Are they a &quot;pack&quot; player or a lone wolf?</td>
+    </tr>
+    <tr>
+      <td><code>ADAT</code> (Avg Distance to Avg Teammate)</td>
+      <td>Do they play central or peripheral angles?</td>
+    </tr>
+  </tbody>
+</table>
 
-**Teamwork (Trading):**
-    *   `PODT` (Proportion of Deaths Traded): When they die, is a teammate close enough to avenge them?
-    *   `POKT` (Proportion of Kills which were Trades): Are they the ones doing the avenging?
-
-**Positioning (Novel Metrics):**
-    *   `ADNT` (Avg Distance to Nearest Teammate): Are they a "pack" player or a lone wolf?
-    *   `ADAT` (Avg Distance to Avg Teammate): Do they play central or peripheral angles?
-
-#### Normalising Geometry: The 0.2–1.0 Scale
+#### Normalising Geometry:
 One major challenge with positional data is that maps have different sizes and geometries (e.g., Nuke has more verticality, Overpass is large). A distance of 100 units can mean something different on each map.
 
-To solve this, I implemented a **Team-Relative Rank** system. For every sampled tick, players were ranked 1–5 based on their distance from teammates, then normalised to a 0.2–1.0 scale.
-*   The scale ranges from **(closest) 0.2 {"<->"} 1.0 (farthest)**.
-
-This normalisation allows one to compare the positional style of players, despite differences in which maps their teams tend to play (decided by a veto process).
+To solve this, the positional metrics (ADNT/ADAT) are **team-relative**. For every sampled tick, players were ranked 1–5 based on their distance from teammates, then normalised to **(closest) 0.2 {"<->"} 1.0 (farthest)**.
 
 ### The Target Labels
 To supervise the analysis, I used expert role labels from [**Harry Richards**](https://x.com/NER0cs) (HLTV Analyst), whose [Positions Databases](https://public.tableau.com/app/profile/harry.richards4213/viz/OLDPositionsDatabaseArchived/PositionsDatabaseNER0cs) are a gold standard in the community.
@@ -93,6 +118,13 @@ Dataset available on: [Kaggle](https://www.kaggle.com/datasets/jamiepacker/cs2-p
 ---
 
 ## Exploratory Analysis
+
+<ProjectLinks
+  liveUrl="/notebooks/01_eda.html"
+  liveLabel="Interactive Report"
+  repoUrl="https://github.com/Jamie-Packer/cs2-playstyle-analysis-2024-public/blob/main/notebooks/01_eda.ipynb"
+  repoLabel="Notebook"
+/>
 
 Before building any models, I needed to answer a fundamental question: 
 > *How many matches (maps) does a player need before their playstyle metrics stabilise?* 
@@ -113,7 +145,16 @@ This asymmetry makes tactical sense: T-side strategies are *executed*, CT-side s
 
 Early analysis revealed a problem: the two positioning metrics, **ADNT** (distance to nearest teammate) and **ADAT** (distance from team centre), were highly correlated (r = 0.92 on T-side, 0.78 on CT-side). This makes intuitive sense: players far from their nearest teammate tend to be far from the team centre.
 
-But this correlation masked an interesting question: *do some roles position further from the centre than their isolation alone would predict?*
+<PlotlyEmbed
+  src="/images/projects/cs2-behavioural-profiling/pos_features_scatter.html"
+  title="3D PCA of T-side playstyles"
+  caption="Interactive scatter plot of players by ADNT and ADAT, with roles colour labelled"
+
+/>
+
+This correlation pointed to an interesting question: 
+
+> Do some roles position further from the centre than their isolation alone would predict?
 
 To answer this, I decomposed the relationship using linear regression. By fitting `ADAT ~ ADNT` for each side and extracting the residuals, I created an **orthogonal positioning feature** that captures "central vs peripheral tendency" independent of isolation.
 
@@ -124,11 +165,16 @@ The results were [revealing](#igl-positioning):
 
 This feature engineering step reduced multicollinearity while preserving (and clarifying) the positional signal that distinguishes roles.
 
-> **Deep Dive:** View the <a href="/notebooks/01_eda.html" target="_blank" rel="noopener noreferrer">interactive HTML report</a> (11.4 MB) or the raw <a href="https://github.com/Jamie-Packer/cs2-playstyle-analysis-2024-public/blob/main/notebooks/01_eda.ipynb" target="_blank" rel="noopener noreferrer">Jupyter Notebook</a> on GitHub.
-
 ---
 
 ## Classifying Roles
+
+<ProjectLinks
+  liveUrl="/notebooks/02_classification.html"
+  liveLabel="Interactive Report"
+  repoUrl="https://github.com/Jamie-Packer/cs2-playstyle-analysis-2024-public/blob/main/notebooks/02_classification.ipynb"
+  repoLabel="Notebook"
+/>
 
 If roles are behaviourally distinct, can a machine learning model predict them purely from statistics?
 
@@ -202,13 +248,52 @@ Why would IGLs play centrally? **Information flow.** Central positions (think: C
 
 This isn't a novel discovery. Analyst [Harry Richards](https://x.com/NER0cs) documented the ["supportive rotator" IGL trend in 2024](https://www.hltv.org/news/38747/why-more-and-more-igls-are-taking-up-the-supportive-rotator-role). But seeing the model independently surface this pattern validates both the features and the classification approach.
 
-### Diagnostic Value
+---
 
-**Spinx** was labelled as an Anchor but the model confidently predicted Rotator. Upon reviewing his 2024 matches, he did indeed play rotating positions on Vitality. **I** had simply mislabelled him when filling gaps in the dataset.
+## Cluster Analysis
 
-This suggests another potential application alongside role inference: it can serve as a **diagnostic tool** to flag inconsistencies in manually-curated role databases.
+<ProjectLinks
+  liveUrl="/notebooks/03_clustering.html"
+  liveLabel="Interactive Report"
+  repoUrl="https://github.com/Jamie-Packer/cs2-playstyle-analysis-2024-public/blob/main/notebooks/03_clustering.ipynb"
+  repoLabel="Notebook"
+/>
 
-> **Deep Dive:** View the <a href="/notebooks/03_classification.html" target="_blank" rel="noopener noreferrer">interactive HTML report</a> (3.2 MB) or the raw <a href="https://github.com/Jamie-Packer/cs2-playstyle-analysis-2024-public/blob/main/notebooks/03_classification.ipynb" target="_blank" rel="noopener noreferrer">Jupyter Notebook</a> on GitHub.
+> If you throw the labels away, do playstyles still **naturally form groups**, and do those groups look like the roles analysts already talk about?
+
+**Mostly, yes!**
+
+<PlotlyEmbed
+  src="/images/projects/cs2-behavioural-profiling/pca3d_t.html"
+  title="3D PCA of T-side playstyles"
+  caption="Interactive 3D PCA (T-side). Use the buttons to colour by Role, Ward cluster, or GMM cluster."
+  height={720}
+/>
+
+I used the same Orthogonal feature set as before (behavioural stats plus the isolation and centrality residuals), ran T and CT separately, and dropped the hybrid labels (Half-Lurker on T, Mixed on CT) so the geometry reflects the core archetypes. Two methods: Hierarchical (Ward) for hard partitions, and a **Gaussian Mixture Model (GMM)** for soft assignments. I fixed **k = 3** (one cluster per core role per side) after checking silhouette scores across k = 2 to 6 to check if it was sensible.
+
+### Soft groups
+
+Silhouette at k = 3 was about **0.17-0.18 on T** and **0.14-0.15 on CT**. So there is structure, but the groups overlap. Spacetakers aren't miles from everyone else, and AWPers share some behavioural DNA with other roles. That is roughly how CS works in practice: roles bleed at the edges.
+
+BIC preferred **tied** covariance for the T-side GMM (three archetypes in different regions of a similarly shaped cloud) and **spherical** on CT (tighter, less elongated defensive structure).
+
+### Agreement with expert roles
+
+<FigureImage
+  src="/images/projects/cs2-behavioural-profiling/dendrogram_t.svg"
+  alt="Ward dendrogram of T-side playstyles"
+  caption="Ward dendrogram of T-side players. Leaf colours are expert roles; cutting at k=3 the clusters largely maps onto each role Spacetaker, Lurker, and AWPer."
+  width={1400}
+  height={800}
+/>
+
+Using **Adjusted Rand Index** (chance-corrected; random partitions score near 0):
+
+*   **T-side:** **0.68 (Ward)** / **0.61 (GMM)**
+*   **CT-side:** **0.31 (Ward)** / **0.30 (GMM)**
+
+T-side is roughly twice as strong. Ward largely pulls out Spacetaker, Lurker, and AWPer blocks (the dendrogram above is the T-side view of that). On CT, Anchors separate more cleanly, while Rotators and AWPers mix. Same porosity the classifier hit, this time without ever seeing the labels during fitting.
 
 
 
