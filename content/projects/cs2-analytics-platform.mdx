@@ -1,64 +1,50 @@
 ---
 published: true
 title: "Counter-Strike Analytics Platform"
-date: "2026-07-30"
-description: "An event-driven, serverless analytics platform on GCP that parses Counter-Strike demos into deep per-match stats. Pipeline, frontend, and CI/CD are live."
+date: "2026-08-21"
+description: "An analytics platform for Counter-Strike: Automated pipelines, mostly serverless, deployed and now in private beta!"
 imageUrl: "/images/projects/cs2-analytics-platform/cs2-analytics-platform.webp"
 liveUrl: "https://cs-bait.vercel.app/"
-tags: ["Google Cloud Platform", "Data Engineering", "Event-Driven Architecture", "Python", "CI/CD", "Counter-Strike"]
+tags: ["Google Cloud Platform", "Data Engineering", "Event-Driven Architecture", "Python", "PostgreSQL", "CI/CD", "Counter-Strike"]
 ---
 
 ## What is this?
 
-Most Counter-Strike analytics tools take a match recording (known as a “demo” file, a replay of everything that happened in a game) and produce personal performance stats: kills, deaths, accuracy, and so on.
+Most Counter-Strike analytics tools take a match recording (a “demo”: a replay of everything that happened) and produce personal performance stats: kills, deaths, accuracy, and so on.
 
-This project uses the same data and presents many of the same stats, but with some much more bespoke ones too, aimed at further quantifying a player’s *style* of play. The long-term goal is a light-hearted analytics product that pokes fun at less-altruistic players.
+This project uses the same data, but instead aims to quantify a player’s *style* of play. 
 
-It is partly a cloud data-engineering learning project, and partly something I want friends (and potentially other players) to actually use. It also sits downstream of my earlier [behavioural modelling work](/projects/cs2-behavioural-profiling): that project asked whether playstyle is measurable; this one is about shipping the pipeline and product surface that can make use of those ideas.
+It sits downstream of my earlier [behavioural modelling work](/projects/cs2-behavioural-profiling): that project asked whether playstyle is measurable, now this is where those ideas can ship :)
 
-Working title: **CS-Bait** (referencing using one’s teammates as “bait”). Final name and domain are TBD; the live demo currently sits on a temporary Vercel URL (linked above). The source is private, so architecture and design choices are documented here instead of a public repo.
+Working title: **CS-Bait** (using one’s teammates as “bait”). Final name and domain are TBD; the live site is on a temporary Vercel URL. The source is private, so the high level architecture is described here.
 
-**Status:** Work in progress. The end-to-end pipeline is live, with automated tests, automatic deploys, and match pages that surface stats you do not get from the in-game scoreboard (nor from existing similar platforms). Steam integration, a better Legendaryness model, and richer playstyle metrics are still ahead.
+**Status:** Private beta. Whitelisted testers can sign in with Steam, sync their recent matches, and have a personal dashboard along with match pages. CI/CD and automated tests are in place.
 
 <FigureImage
   src="/images/projects/cs2-analytics-platform/demo1.webp"
-  alt="Sped-up walkthrough of uploading a demo and exploring the match page"
-  caption="Upload → processing → match page (sped up)."
+  alt="Sped-up walkthrough of processing a match and exploring the results"
+  caption="Alpha footage demonstrating an older, manual, match ingestion → results (sped up)."
   width={1920}
   height={1080}
   unoptimized
 />
 
-
 ---
 
 ## How it works today
 
-The live pipeline:
+1. A user **signs in** with Steam (their Counter-Strike login) and pastes a couple of codes
+2. Users then **sync their matches**
+3. Their demos get **ingested and parsed automatically** (and backfilled if required)
+4. The frontend shows the user **all their awesome stats!**
 
-1. A user uploads a match recording from the browser
-2. The file lands in cloud storage via a presigned URL
-3. Object finalize triggers Pub/Sub
-4. A Cloud Run worker parses the demo and extracts stats
-5. The frontend polls for status, then shows a match page when results are ready
-
-Upload → storage event → queue → processor → results.
-
-Beyond the usual K/D/ADR, the match page surfaces side-split views of opening attempts, first-contact timing, losses survived (“saves”), and last-alive-on-wipe counts, plus a per-round timeline, a round-by-round opening-duel log, and a **Legendaryness** score (v0.1, computed in the browser today) that ranks how aggressively someone threw themselves into the fight. That kind of depth is not available from the game UI after a match; it has to be reconstructed from the demo.
-
-<FigureImage
-  src="/images/projects/cs2-analytics-platform/alpha-diagram.webp"
-  alt="High-level architecture diagram of the CS-Bait MVP pipeline"
-  caption="MVP architecture: browser upload → GCS → Pub/Sub → Cloud Run → Silver results."
-  width={6887}
-  height={2877}
-/>
+This gives a user access to many bespoke statistics not available in-game nor on similar platforms.
 
 ---
 
 ## Architecture
 
-An **event-driven, serverless data pipeline on Google Cloud Platform**, loosely following a **medallion / lakehouse** pattern:
+An **event-driven, mostly serverless platform on Google Cloud Platform**:
 
 <table>
   <thead>
@@ -70,58 +56,56 @@ An **event-driven, serverless data pipeline on Google Cloud Platform**, loosely 
   </thead>
   <tbody>
     <tr>
-      <td>**Bronze**</td>
-      <td>Raw uploaded demo files</td>
-      <td>Temporary landing zone</td>
+      <td>**Lake**</td>
+      <td>Per-match Parquet</td>
+      <td>Parse-once stats source of truth</td>
     </tr>
     <tr>
-      <td>**Silver**</td>
-      <td>Per-match JSON results</td>
-      <td>Frontend-ready analytics payload</td>
+      <td>**Serving Bucket**</td>
+      <td>Per-match JSON</td>
+      <td>Match-page payload</td>
     </tr>
     <tr>
-      <td>**OLTP** *(planned)*</td>
-      <td>Users, jobs, match index, fact rows</td>
-      <td>App database for Steam-era product state (not a medallion tier)</td>
+      <td>**OLTP**</td>
+      <td>Neon (Postgres)</td>
+      <td>Users, match index, dashboard facts</td>
     </tr>
     <tr>
       <td>**Gold** *(planned)*</td>
-      <td>Aggregated cross-match insights</td>
-      <td>Leaderboards, trends, career rollups</td>
+      <td>Aggregated platform insights</td>
+      <td>Leaderboards, public rollups</td>
     </tr>
   </tbody>
 </table>
 
-Silver is the per-match document store today. An OLTP database comes first once Steam auth lands (users, ingestion jobs, and SQL-friendly facts). Gold can then be derived from those facts; a warehouse copy is optional later and is not on the parse hot path.
+<FigureImage
+  src="/images/projects/cs2-analytics-platform/beta-diagram.webp"
+  alt="High-level architecture diagram of the CS-Bait platform"
+  caption="Architecture snapshot from early beta"
+  width={6887}
+  height={2877}
+/>
 
 ### Current stack
 
-- **Frontend:** Next.js (App Router) on Vercel
-- **Upload path:** Presigned URL to GCS (the app server does not shuttle large files)
-- **Storage:** GCS buckets for raw demos, job status, and processed results
-- **Messaging:** Pub/Sub on object finalize, with push delivery and a dead-letter queue
-- **Compute:** Cloud Run (Python / FastAPI), scale-to-zero when idle
-- **Parsing / analytics:** `demoparser2` for demo parsing, Polars for feature extraction
-- **Module boundaries:** parse → intermediate model → feature extraction → orchestration / I/O
-- **CI/CD:** GitHub Actions: unit tests on PR/push; on `main`, build/push the image to Artifact Registry and deploy Cloud Run
+- **Frontend:** Next.js on Vercel (Steam login, Sync, dashboard, match pages)
+- **Ingest:** Valve APIs + a small GCE bot + Cloud Tasks
+- **Compute:** Cloud Run (Python / FastAPI) for parse and backfill; scale-to-zero when idle
+- **Storage:** GCS for Parquet, serving JSON, and job status; Neon for product state
+- **Parsing / analytics:** Python demoparser → Polars feature extraction
+- **CI/CD:** GitHub Actions with path-filtered deploys
 
 ### Design choices
 
-- **Two IDs:** an `uploadId` for job tracking, and a content `fingerprint` (checksum + size) for dedupe and the final match URL
-- **Schema versioning** on Silver results, so outputs can be reprocessed when the analytics model changes
-- **Fingerprint-level duplicate handling:** the same file is not fully reprocessed if a current result already exists
-- **Raw demos are deleted after processing** (with a Bronze lifecycle safety net) to keep storage costs down
-- **Results can be fetched directly from GCS**, so the match page does not need to go through the app server
-- **Cost-aware defaults:** scale-to-zero compute and a lean container, so idle time does not burn money
+- **Dedupe before download** so two friends sharing a match only pay for one (expensive) parse
+- **Schema versioning** so stats can be recomputed from the lake without re-parsing
+- **Match pages don't hit the OLTP:** the browser fetches match data straight from GCS
+- **Cost-aware defaults:** scale-to-zero parsers, a tiny always-on bot, short-lived Postgres sessions so the database can idle
 
 ---
 
 ## What’s next
 
-### 1. Steam auth + OLTP
+**Product:** Richer stats and a sharper UI. The things that make someone want to open it after a game.
 
-Manual upload worked for the MVP, but demos are large and high-friction to upload every match. Steam auth plus backend demo download would make the product much easier to use, and it needs an app database for users, jobs, and a match index. I am leaning toward **Neon** (serverless Postgres) over always-on Cloud SQL or a document store that fights SQL aggregates. Match pages would keep serving Silver JSON from GCS; the OLTP would hold pointers and compact fact rows. Once demos arrive server-side, status can live in account-backed history instead of the temporary upload-status polling the browser owns today. A Gold / warehouse layer stays optional and later.
-
-### 2. Legendaryness and playstyle depth
-
-Legendaryness v0.1 already ships on the match page (Legends/Losers tab), but it is still a rough client-side score. Next steps are to harden that model, move the computation into the backend so Silver carries the result, and add more bespoke playstyle / role-centric metrics that further set the product apart from existing platforms.
+**Scale:** Private beta scale works, next is raising the ceiling. A clear cost/capacity scaling roadmap, perhaps a cheaper region, and compact the lake layer.
